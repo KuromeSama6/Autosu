@@ -1,2 +1,2 @@
 # Autosu
-Osu! autopilot script, made with electron. Demonstration purposes only.
+Osu! autopilot script, made with CefSharp Winforms.
