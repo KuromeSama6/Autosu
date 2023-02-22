@@ -1,52 +1,57 @@
-# Autosu
-Osu! autopilot script, made with CefSharp Winforms.
+# Autosu!
+Osu! autopilot script, made with CefSharp Winforms. A result of lots of modules and functions crammed into a single application.
 
-USE THIS WITH RESPONSABLITY!!
-I DO NOT, I REPEAT, I DO NOT TAKE RESPONSABILITY IF YOU GET YOUR ACCOUNT BANNED/RESTRICTED ON OSU!
+**Logging out and disconnection from network is recommended.** Usage of this software in competitive gameplay is CLEARLY against the Osu! Rules and WILL lead to account restrictions.
 
-**PROTIP: It is safer to logout of your account before letting Osu!Bot play any beatmap.**
+This software is made with the intent of experimenting human movement simulation with the Osu! game. You are not required to disable/quit any antivirus software before beginning.
 
-## Video Showcase Playlist
-*COMING SOON*
+KuromeSama6, Standard Arc Hiktal, and all related developers may not be held liable for any Osu! account restrictions as a result of using this software.
+
+This software is open source but private repository, until a stable release is produced.
+
+
+## Video Showcase
+-
 
 ## Downloadable Executables
-[Latest release](https://github.com/DDDinggo22/Osu-Bot-V3/releases/tag/v190205 "Goto latest release")  
-[Releases](https://github.com/DDDinggo22/Osu-Bot-V3/releases "All releases")
+-
 
-## Usage Instructions
-0. Unzip anywhere you like.
-1. Execute (Osu!Bot V3).
-   - Osu!Bot V3_x64.exe on 64-bit windows systems
-   - Osu!Bot V3_x86.exe on 32-bit windows systems
-2. Press \***insert**\* to queue a beatmap.
-3. Play any of the queued maps.
-4. Relax and see Osu!Bot V3 dance over the playing field.
+## Clean Installation
+1. Proceed to the "Releases" section of this repository and download a release.
+2. Extract the files from the ZIP file, or install the software with the MSI installer, into any directory of your choice.
+3. Open Autosu!.exe.
+4. You will see the song selection screen. In the bottom there are two boxes, a *Beatmap Selection* box and a *Difficulty Selection*. Both boxes' contents are scrollable if its content overflows. Both boxes should be blank and 0 Beatmaps should be found.
+5. Copy the absolute path of your Osu! installation directory (where the osu!.exe file is located), and paste it in the "Osu! Path" input box. Hit enter and beatmap should now load. This setting saves automatically.
+6. Click on a beatmap and a difficulty next to it. The wide box below it should now show. Click "Initialize Autosu!" to confirm song selection and proceed to the autopilot screen.
 
-### Hotkey layout
-* \***Home**\* toggles the HUD
-* \***TAB**\* toggles Debug UI elements
-	 - Current time / "signature not found" message
-	 - Current updates per second the bot is running at
-* \***Insert**\* Allows the user to add beatmaps to the queue
+## Autopilot Usage
+The Osu! bot is referred to as "autopilot". 
 
-## Remarks
-### Known issues
-* Sometimes the beatmap does not get added to the queue.  
-   I am investigating the problem, but it does not seem to affect other features of the bot.
-* Hotkeys are system wide, meaning they will activate from anywhere.  
-   This will soon change to a localized key input.
+In the autopilot screen, you will see five(5) boxes. They are:
 
-### Compatibility
-* Osu!Bot V3 is **NOT** yet able to play with the "**Hardrock**" mod.  
-	 But works fine with all other mods.
-* Osu!Bot V3 does **NOT** have the ability to select the beatmap automaticly, like V2 could.  
-   I am still working on this.
-* Osu!Bot V3 has a HUD that works **ONLY** when osu is in **borderless** or **windowed** mode.  
-   Making it work in fullscreen mode is extremly difficult. And will not be a priority feature.
-* Osu!Bot V3 is using "**mouse button 1**" as its form of clicking.  
-   Soon this will be customizable to keyboard too.
-* For now dance modes are hard coded.  
-   But they will be back very soon.
-	 
-### Features
-* Any new feature request can be made on my discord server [here](discord.me/Disguard "Join Disguard").
+1. Autopilot Master Control - The top wide box with the beatmap thumbnail, name, and difficulty. To the right of that box are toggle switches `A/P CMD`, `A/P DEBUG`, and a long press button `DISENGAGE`.
+- `A/P CMD` - Enables autopilot at full control. Must use `DISENGAGE` to disable.
+- `A/P DEBUG` - Enables autopilot in debug mode. 1) Will not hit keys, and 2) will play the beatmap audio, in order to test syncronization with osu!, and 3) starts autopilot procedure immediately without waiting for beatmap to start in osu!.
+- `DISENGAGE` - Master disengage. Disables autopilot.
+
+2. Autopilot Heads-Up Status Panel - The wide box below the Box 1 that has a bunch of status indicators.
+
+
+A status indicator can be:
+1. Gray/Unlit - Not Active
+2. Orange/Amber - Active. Often indicates a warning.
+3. Green - Active. Often indicates a module is armed or running.
+
+- `A/P`
+	- Amber: Autopilot is armed and is waiting for song to start.
+	- Green: Autopilot is running.
+- `A/P P/RST`
+	- Amber Flash: Autopilot has been disengage. Push this button to suppress warning.
+- `OPMDE SWITCH`
+	- Amber: Auto-switch is armed and is awating user input.
+	- Green: Auto-switch is allowing human input and disables bot input.
+- `ACCURACY`
+	- Amber: Accuracy is too high or too low. If the accuracy is too low, or is too high while `DETENT STBY` is on, autopilot will disengage. 
+	- Green: Accuracy is OK.
+	
+	
