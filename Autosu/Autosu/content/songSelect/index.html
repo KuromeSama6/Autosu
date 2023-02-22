@@ -1,0 +1,95 @@
+<head>
+	<meta charset="utf-8">
+	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Autosu!</title>
+	<link rel="stylesheet" href="../common/css/bootstrap.min.css">
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="../common/css/common.css">
+
+</head>
+
+<body class="bg-dark text-light">
+	<div class="container" id="main-container">
+		<div class="row">
+			<div style="text-align: center" class="heading">
+				<img src="../../resources/common/logo.png" class="logo">
+				<h5>Experimental Bot/Autopilot for Osu!.</h5>
+				<p>Current build of Autosu! supports Osu!std only.</p>
+			</div>
+			<div class="mb-3">
+			<div class="mb-3">
+				<p class="form-label">
+					<b>Osu! Beatmap Directory</b><br>
+					Select your Osu! beatmap directory. Can be found at <code>osu!/Songs</code>. Must be absolute path.<br>
+					This setting saves automatically.<br><br>
+					Current path: <code id="$current-beatmaps-path">&lt;NOT SELECTED&gt;</code>
+				</p>
+				<div class="input-group">
+					<span class="input-group-text">file://</span>
+					<input type="text" class="form-control bg-dark text-light" id="!filedir-input">
+				</div>
+			</div>
+
+			<div class="mb-3">
+				<p class="form-label">
+					<b>Beatmap Name Filter</b><br>
+					Search filters by inclusion.<br>
+					Beatmap listing updates automatically.
+				</p>
+				<div class="input-group">
+					<span class="input-group-text">Beatmap Name Includes:</span>
+					<input type="text" class="form-control bg-dark text-light" id="!name-filter">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container" id="beatmap-listing">
+		<div class="row">
+			<p id="message">No data.</p>
+		</div>
+		
+		<div class="row" id="listing-container">
+			<div class="col-9">
+				<h5>Beatmap Select (Scrollable)</h5>
+				<div class="list-group individual-box" role="tablist" id="beatmaps-container" style="height: 50vh;">
+					<a class="list-group-item list-group-item-action" id="beatmap-listing-template" href="javascript:;" hidden>
+						<span>#BeatmapName</span>
+						<span class="badge bg-primary rounded-pill" style="float:right">#Difficulties</span>
+					</a>
+				</div>
+			</div>
+			<div class="col-3">
+				<h5>Difficulty Select (Scrollable)</h5>
+				<div class="list-group individual-box" role="tablist" id="difficulty-container" style="height: 50vh;">
+					<a class="list-group-item list-group-item-action" id="difficulty-listing-template" hidden href="javascript:;">#TrackDifficulty?</a>
+				</div>
+			</div>
+		</div>
+		<br>
+		<div class="row individual-box d-flex align-items-center" id="confirm-box">
+			<div class="col-2">
+				<img class="preview-thumbnail" src="img-placeholder.png" id="preview-img">
+			</div>
+			<div class="col-5">
+				<h2 id="$chosen-beatmap-title">Choose a Beatmap</h2>
+				<p>Variation: <b id="$chosen-beatmap-desc">Not Selected</b></p>
+			</div>
+			<div class="col-5">
+				<button type="button" class="btn btn-outline-warning select-button" id="@start-btn" hidden>Initialize Autosu!</button>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="footer">
+		<small>Powerd by STANDARD ARC HIKTAL</small><br>
+		<small>autosu.stdarc.hiktal.moe</small>
+	</div>	
+
+</body>
+
+<script src="../common/js/common.js"></script>
+<script src="main.js"></script>
+</html>

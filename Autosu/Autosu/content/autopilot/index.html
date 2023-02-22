@@ -1,0 +1,260 @@
+<head>
+	<meta charset="utf-8">
+	<link rel="icon" type="image/x-icon" href="/images/favicon.png">
+	<meta name="viewport" content="width=device-width,initial-scale=1">
+	<title>Autosu!</title>
+	<link rel="stylesheet" href="../common/css/bootstrap.min.css">
+	<link rel="stylesheet" href="main.css">
+	<link rel="stylesheet" href="../common/css/common.css">
+
+</head>
+
+<body class="bg-dark text-light">
+	<div class="container" id="main-container">
+		<div class="row">
+			<div style="text-align: center" class="heading">
+				<img src="../../resources/common/logo.png" class="logo">
+				<h5>Experimental Bot/Autopilot for Osu!.</h5>
+				<p>Current build of Autosu! supports Osu!std only.</p>
+			</div>
+			<div class="mb-3">
+		</div>
+	</div>
+
+	<div class="container">
+		<div class="row individual-box d-flex align-items-center" id="confirm-box">
+			<div class="col-2">
+				<img class="preview-thumbnail" src="img-placeholder.png" id="preview-img">
+			</div>
+			<div class="col-5">
+				<h2 id="$chosen-beatmap-title">UNABLE LOAD BEATMAP</h2>
+				<p>Variation: <b id="$chosen-beatmap-desc">UNABLE LOAD VARIATION</b></p>
+			</div>
+			<div class="col-5 d-flex justify-content-end align-items-center position-relative">
+				<!-- cmd -->
+				<input type="checkbox" class="btn-check" id="!cmd" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Start Autopilot - Full Command">
+					A/P CMD
+					<div class="d-flex align-items-center" hidden>
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- ts -->
+				<input type="checkbox" class="btn-check" id="!ts" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Start Autopilot - Test">
+					A/P
+					DEBUG
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- disengage -->
+				<input type="checkbox" class="btn-check" id="!disengage" autocomplete="off">
+				<label class="btn disengage-btn btn-primary d-flex align-items-center justify-content-center" for="btn-check" title="Manual Disengage">
+					DISENGAGE
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+			</div>
+		</div>
+
+	</div>
+
+	<div class="container">
+		<div class="row">
+			<div class="col-3 individual-box">
+				<!-- hit delay -->
+				<input type="checkbox" class="btn-check" id="!delayhit" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Random hit delay:
+After aligning with the object, add a random delay before hitting the object.">
+					DELAY HIT<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- hit acc -->
+				<input type="checkbox" class="btn-check" id="!accsel" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Random accuracy with target:
+After setting a desired minimum accuracy for the entire song, automatically insert hit random delays so that the final accuracy is no lower than the set minimum accuracy.">
+					ACC SEL<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- move delay -->
+				<input type="checkbox" class="btn-check" id="!delaymove" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Random move delay:
+After hitting the key, add a random delay before moving to the next object.">
+					DELAY MOVE<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- target offset -->
+				<input type="checkbox" class="btn-check" id="!targetoffset" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Random target location offset:
+Place the cursor at a random location within the object.">
+					TARGET OFFSET<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- blank period random mouse movement -->
+				<input type="checkbox" class="btn-check" id="!blankmouse" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Insert random mouse movements during blank periods.">
+					BLANK MOUSE<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- sliders human movement -->
+				<input type="checkbox" class="btn-check" id="!slidermvnt" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Silders: Simulate human hand movement:
+Mouse movement is not smooth and is in small sections.">
+					SLIDER MVNT<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+				
+				<!-- short sliders halt -->
+				<input type="checkbox" class="btn-check" id="!sliderhalt" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Do not move mouse on short sliders.">
+					SLIDER HALT<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- imperfect spinner -->
+				<input type="checkbox" class="btn-check" id="!spinoffset" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Spinners: Imperfect movement path:
+Mouse movement is not in a perfect circle, but a ellipse.">
+					SPIN OFFSET<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- random spinner -->
+				<input type="checkbox" class="btn-check" id="!spinrandom" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Spinners: Random movement offset each revolution:
+Slight offset in circular motion with each revolution of the spinner.">
+					SPIN RANDOM<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- human endurance -->
+				<input type="checkbox" class="btn-check" id="!humanendur" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Simulate human hand endurance:
+Hands get “tired” after consecutive fast notes and increase hit error.">
+					HUMAN ENDUR<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- human nervous -->
+				<input type="checkbox" class="btn-check" id="!humannerv" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Simulate human nervousness at end of song:
+Player gets “nervous” approaching end of song and increases hit error.">
+					HUMAN NERV<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- human distract -->
+				<input type="checkbox" class="btn-check" id="!huamndetent" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Simulate human distraction:
+Simulates a player getting distracted and desyncs play.">
+					HUMAN DETENT<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- auto switch -->
+				<input type="checkbox" class="btn-check" id="!autoswitch" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Automatically switch:
+Automatically plays while there are no input from the user. Upon user input, stop the autopilot and let the user play.">
+					AUTO SWITCH<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- auto switch -->
+				<input type="checkbox" class="btn-check" id="!tkoverstby" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Takeover Standby:
+Automatically disengages upon user input">
+					TKOVR STBY<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- play detent -->
+				<input type="checkbox" class="btn-check" id="!playdetent" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Play Detent:
+Automatically disengages and fails if accuracy on a hard (fast and quick notes) section is too high.">
+					DETENT STBY<br>
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+			</div>
+
+			<div class="col-6 individual-box">
+				<div class="d-flex flex-row">
+					<div class="input-box">
+						<small style="display:inline-block">HIT DELAY MS MAX</small><br>
+						<input type="number" id="!hitdelay-sel" style="width: 3em;" class="boeing-input" min="0" max="10000" value="00065" data-digits="5"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">MOVE DELAY MS MAX</small><br>
+						<input type="number" id="!movedelay-sel" style="width: 3em;" class="boeing-input" min="0" max="10000" value="00010" data-digits="5"><br>
+					</div>
+				</div>
+				<br>
+				<div class="d-flex flex-row">
+					<div class="input-box">
+						<small style="display:inline-block">ACC MIN</small><br>
+						<input type="number" id="!minimum-acc" style="width: 2em;" class="boeing-input" min="0" max="100" value="095" data-digits="3"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">TARGET LOC RAND</small><br>
+						<input type="number" id="!targetloc-offset" style="width: 2em;" class="boeing-input" min="0" max="100" value="050" data-digits="3"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">SPINNER RAND AMT</small><br>
+						<input type="number" id="!targetloc-offset" style="width: 2em;" class="boeing-input" min="0" max="10000" value="050" data-digits="3"><br>
+					</div>
+				</div>
+			</div>
+
+		</div>
+	</div>
+
+	<div class="footer">
+		<small>Powerd by STANDARD ARC HIKTAL</small><br>
+		<small>autosu.stdarc.hiktal.moe</small>
+	</div>	
+
+</body>
+
+<script src="../common/js/common.js"></script>
+<script src="main.js"></script>
+</html>
