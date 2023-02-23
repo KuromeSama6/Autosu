@@ -56,6 +56,14 @@
               "target": "Package",
               "version": "[110.0.250, )"
             },
+            "EasyHook": {
+              "target": "Package",
+              "version": "[2.7.7097, )"
+            },
+            "Indieteur.GlobalHooks": {
+              "target": "Package",
+              "version": "[1.0.0, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.2, )"

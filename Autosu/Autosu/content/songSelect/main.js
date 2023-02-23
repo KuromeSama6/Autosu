@@ -75,9 +75,6 @@ function renderDifficulties(title){
     }
 }
 
-function selectBeatmap() {
-
-}
 
 $g("!filedir-input").addEventListener("change", () => {
 
@@ -87,4 +84,7 @@ $g("!filedir-input").addEventListener("change", () => {
 });
 $g("!name-filter").addEventListener("keyup", () => {
     renderSongs($g("!name-filter").value);
+})
+$g("@start-btn").addEventListener("click", () => {
+    upstream.startAutopilot(selected.title, selected.difficulty);
 })

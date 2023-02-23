@@ -396,6 +396,22 @@
           }
         }
       },
+      "EasyHook/2.7.7097": {
+        "runtime": {
+          "lib/net40/EasyHook.dll": {
+            "assemblyVersion": "2.7.7097.0",
+            "fileVersion": "2.7.7097.0"
+          }
+        }
+      },
+      "Indieteur.GlobalHooks/1.0.0": {
+        "runtime": {
+          "lib/Indieteur.GlobalHooks.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.2": {
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
@@ -476,6 +492,20 @@
       "sha512": "sha512-ssvhRvnyKJPwqU+yaPB1q25uefOlJIFp6d/KF5je6wtAPy1YN+s+3BkYWlyPYXByW5hRhahbY0Ofyhsc2uRJLA==",
       "path": "chromiumembeddedframework.runtime.win-x86/110.0.25",
       "hashPath": "chromiumembeddedframework.runtime.win-x86.110.0.25.nupkg.sha512"
+    },
+    "EasyHook/2.7.7097": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DCx3T5I1D5zo6BIjiEjE/1Wlsm0UPw9Z0DlQ9Wz12YSBohQMD4vlt03OPXfb5+MQ2WeieqVKYXvwNhnT/E+fbg==",
+      "path": "easyhook/2.7.7097",
+      "hashPath": "easyhook.2.7.7097.nupkg.sha512"
+    },
+    "Indieteur.GlobalHooks/1.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bFmNnR7h5i4Rz6twBZdHLigiP3pFei5Jf4DNuwkNTHBSUTRBkkkVfZrVlv60L/6qOX/9YgbHIYy6CO8IM8v6rA==",
+      "path": "indieteur.globalhooks/1.0.0",
+      "hashPath": "indieteur.globalhooks.1.0.0.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.2": {
       "type": "package",

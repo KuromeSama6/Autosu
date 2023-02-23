@@ -352,6 +352,28 @@
           }
         }
       },
+      "EasyHook/2.7.7097": {
+        "type": "package",
+        "compile": {
+          "lib/net40/EasyHook.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net40/EasyHook.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Indieteur.GlobalHooks/1.0.0": {
+        "type": "package",
+        "compile": {
+          "lib/Indieteur.GlobalHooks.dll": {}
+        },
+        "runtime": {
+          "lib/Indieteur.GlobalHooks.dll": {}
+        }
+      },
       "Newtonsoft.Json/13.0.2": {
         "type": "package",
         "compile": {
@@ -1468,6 +1490,60 @@
         "runtimes/win-x86/native/vulkan-1.dll"
       ]
     },
+    "EasyHook/2.7.7097": {
+      "sha512": "DCx3T5I1D5zo6BIjiEjE/1Wlsm0UPw9Z0DlQ9Wz12YSBohQMD4vlt03OPXfb5+MQ2WeieqVKYXvwNhnT/E+fbg==",
+      "type": "package",
+      "path": "easyhook/2.7.7097",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "content/net35/EasyHook32.dll",
+        "content/net35/EasyHook32Svc.exe",
+        "content/net35/EasyHook64.dll",
+        "content/net35/EasyHook64Svc.exe",
+        "content/net35/EasyLoad32.dll",
+        "content/net35/EasyLoad64.dll",
+        "content/net40/EasyHook32.dll",
+        "content/net40/EasyHook32Svc.exe",
+        "content/net40/EasyHook64.dll",
+        "content/net40/EasyHook64Svc.exe",
+        "content/net40/EasyLoad32.dll",
+        "content/net40/EasyLoad64.dll",
+        "contentFiles/any/net35/EasyHook32.dll",
+        "contentFiles/any/net35/EasyHook32Svc.exe",
+        "contentFiles/any/net35/EasyHook64.dll",
+        "contentFiles/any/net35/EasyHook64Svc.exe",
+        "contentFiles/any/net35/EasyLoad32.dll",
+        "contentFiles/any/net35/EasyLoad64.dll",
+        "contentFiles/any/net40/EasyHook32.dll",
+        "contentFiles/any/net40/EasyHook32Svc.exe",
+        "contentFiles/any/net40/EasyHook64.dll",
+        "contentFiles/any/net40/EasyHook64Svc.exe",
+        "contentFiles/any/net40/EasyLoad32.dll",
+        "contentFiles/any/net40/EasyLoad64.dll",
+        "easyhook.2.7.7097.nupkg.sha512",
+        "easyhook.nuspec",
+        "lib/net35/EasyHook.dll",
+        "lib/net35/EasyHook.xml",
+        "lib/net40/EasyHook.dll",
+        "lib/net40/EasyHook.xml",
+        "tools/install.ps1"
+      ]
+    },
+    "Indieteur.GlobalHooks/1.0.0": {
+      "sha512": "bFmNnR7h5i4Rz6twBZdHLigiP3pFei5Jf4DNuwkNTHBSUTRBkkkVfZrVlv60L/6qOX/9YgbHIYy6CO8IM8v6rA==",
+      "type": "package",
+      "path": "indieteur.globalhooks/1.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "indieteur.globalhooks.1.0.0.nupkg.sha512",
+        "indieteur.globalhooks.nuspec",
+        "lib/Indieteur.GlobalHooks.dll",
+        "readme.txt"
+      ]
+    },
     "Newtonsoft.Json/13.0.2": {
       "sha512": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
       "type": "package",
@@ -1504,6 +1580,8 @@
       "CefSharp.Common >= 110.0.250",
       "CefSharp.WinForms >= 110.0.250",
       "CefSharp.WinForms.NETCore >= 110.0.250",
+      "EasyHook >= 2.7.7097",
+      "Indieteur.GlobalHooks >= 1.0.0",
       "Newtonsoft.Json >= 13.0.2",
       "chromiumembeddedframework.runtime.win-arm64 >= 110.0.25",
       "chromiumembeddedframework.runtime.win-x64 >= 110.0.25",
@@ -1566,6 +1644,14 @@
             "target": "Package",
             "version": "[110.0.250, )"
           },
+          "EasyHook": {
+            "target": "Package",
+            "version": "[2.7.7097, )"
+          },
+          "Indieteur.GlobalHooks": {
+            "target": "Package",
+            "version": "[1.0.0, )"
+          },
           "Newtonsoft.Json": {
             "target": "Package",
             "version": "[13.0.2, )"
@@ -1613,6 +1699,26 @@
       "warningLevel": 1,
       "message": "Package 'CefSharp.WinForms 110.0.250' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "CefSharp.WinForms",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'EasyHook 2.7.7097' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "EasyHook",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Indieteur.GlobalHooks 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Indieteur.GlobalHooks",
       "targetGraphs": [
         "net6.0-windows7.0"
       ]

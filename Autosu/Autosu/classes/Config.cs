@@ -13,7 +13,8 @@ namespace Autosu.classes {
         [NonSerialized] public static Config instance = SerializationUtil.LoadOrNew<Config>(CommonUtil.ParsePath("userdata/config.aosu"));
 
         #region General Config
-        public string beatmapPath = "";
+        public string osuPath = "";
+        public string beatmapPath => $@"{osuPath}\Songs";
 
         #endregion
 

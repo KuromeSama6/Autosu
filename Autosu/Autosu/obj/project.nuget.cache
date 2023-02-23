@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "EPY7837sEqVgqo6HwltDn5l2W9Pc/WzlWemd9d3+bHqlXtILz6WZWYumiMdHl5XlQceKzrs/Tny8aaqSKX3QfA==",
+  "dgSpecHash": "gXt3LjZ6KkWMMYVNi/7I+ru9CeofwghjY6ANwCGcwpmZxefL2wXlbjcaQwYu0mHNqkEeEAjxNs+SJGZb4/cheg==",
   "success": true,
   "projectFilePath": "D:\\dev\\Autosu\\Autosu\\Autosu\\Autosu.csproj",
   "expectedPackageFiles": [
@@ -14,6 +14,8 @@
     "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-arm64\\110.0.25\\chromiumembeddedframework.runtime.win-arm64.110.0.25.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x64\\110.0.25\\chromiumembeddedframework.runtime.win-x64.110.0.25.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x86\\110.0.25\\chromiumembeddedframework.runtime.win-x86.110.0.25.nupkg.sha512",
+    "C:\\Users\\1chan\\.nuget\\packages\\easyhook\\2.7.7097\\easyhook.2.7.7097.nupkg.sha512",
+    "C:\\Users\\1chan\\.nuget\\packages\\indieteur.globalhooks\\1.0.0\\indieteur.globalhooks.1.0.0.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
   ],
   "logs": [
@@ -23,6 +25,26 @@
       "warningLevel": 1,
       "message": "Package 'CefSharp.WinForms 110.0.250' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "CefSharp.WinForms",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'EasyHook 2.7.7097' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "EasyHook",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'Indieteur.GlobalHooks 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "Indieteur.GlobalHooks",
       "targetGraphs": [
         "net6.0-windows7.0"
       ]

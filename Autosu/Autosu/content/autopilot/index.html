@@ -16,6 +16,7 @@
 				<img src="../../resources/common/logo.png" class="logo">
 				<h5>Experimental Bot/Autopilot for Osu!.</h5>
 				<p>Current build of Autosu! supports Osu!std only.</p>
+				<a href="javascript:returnToMenu()">Return to Beatmap Select</a>
 			</div>
 			<div class="mb-3">
 		</div>
@@ -32,7 +33,7 @@
 			</div>
 			<div class="col-5 d-flex justify-content-end align-items-center position-relative">
 				<!-- cmd -->
-				<input type="checkbox" class="btn-check" id="!cmd" autocomplete="off">
+				<input type="checkbox" class="btn-check" id="@cmd" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Start Autopilot - Full Command">
 					A/P CMD
 					<div class="d-flex align-items-center" hidden>
@@ -41,7 +42,7 @@
 				</label>
 
 				<!-- ts -->
-				<input type="checkbox" class="btn-check" id="!ts" autocomplete="off">
+				<input type="checkbox" class="btn-check" id="@ts" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Start Autopilot - Test">
 					A/P
 					DEBUG
@@ -51,7 +52,7 @@
 				</label>
 
 				<!-- disengage -->
-				<input type="checkbox" class="btn-check" id="!disengage" autocomplete="off">
+				<input type="checkbox" class="btn-check" id="@disengage" autocomplete="off">
 				<label class="btn disengage-btn btn-primary d-flex align-items-center justify-content-center" for="btn-check" title="Manual Disengage">
 					DISENGAGE
 					<div class="d-flex align-items-center">
@@ -68,7 +69,7 @@
 		<div class="row">
 			<div class="col-3 individual-box">
 				<!-- hit delay -->
-				<input type="checkbox" class="btn-check" id="!delayhit" autocomplete="off">
+				<input type="button" class="btn btn-check togglebtn" id="toggle:delayhit" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Random hit delay:
 After aligning with the object, add a random delay before hitting the object.">
 					DELAY HIT<br>
@@ -78,7 +79,7 @@ After aligning with the object, add a random delay before hitting the object.">
 				</label>
 
 				<!-- hit acc -->
-				<input type="checkbox" class="btn-check" id="!accsel" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:accsel" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Random accuracy with target:
 After setting a desired minimum accuracy for the entire song, automatically insert hit random delays so that the final accuracy is no lower than the set minimum accuracy.">
 					ACC SEL<br>
@@ -88,7 +89,7 @@ After setting a desired minimum accuracy for the entire song, automatically inse
 				</label>
 
 				<!-- move delay -->
-				<input type="checkbox" class="btn-check" id="!delaymove" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:delaymove" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Random move delay:
 After hitting the key, add a random delay before moving to the next object.">
 					DELAY MOVE<br>
@@ -98,7 +99,7 @@ After hitting the key, add a random delay before moving to the next object.">
 				</label>
 
 				<!-- target offset -->
-				<input type="checkbox" class="btn-check" id="!targetoffset" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:targetoffset" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Random target location offset:
 Place the cursor at a random location within the object.">
 					TARGET OFFSET<br>
@@ -108,7 +109,7 @@ Place the cursor at a random location within the object.">
 				</label>
 
 				<!-- blank period random mouse movement -->
-				<input type="checkbox" class="btn-check" id="!blankmouse" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:blankmouse" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Insert random mouse movements during blank periods.">
 					BLANK MOUSE<br>
 					<div class="d-flex align-items-center">
@@ -117,7 +118,7 @@ Place the cursor at a random location within the object.">
 				</label>
 
 				<!-- sliders human movement -->
-				<input type="checkbox" class="btn-check" id="!slidermvnt" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:slidermvnt" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Silders: Simulate human hand movement:
 Mouse movement is not smooth and is in small sections.">
 					SLIDER MVNT<br>
@@ -127,7 +128,7 @@ Mouse movement is not smooth and is in small sections.">
 				</label>
 				
 				<!-- short sliders halt -->
-				<input type="checkbox" class="btn-check" id="!sliderhalt" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:sliderhalt" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Do not move mouse on short sliders.">
 					SLIDER HALT<br>
 					<div class="d-flex align-items-center">
@@ -136,7 +137,7 @@ Mouse movement is not smooth and is in small sections.">
 				</label>
 
 				<!-- imperfect spinner -->
-				<input type="checkbox" class="btn-check" id="!spinoffset" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:spinoffset" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Spinners: Imperfect movement path:
 Mouse movement is not in a perfect circle, but a ellipse.">
 					SPIN OFFSET<br>
@@ -146,7 +147,7 @@ Mouse movement is not in a perfect circle, but a ellipse.">
 				</label>
 
 				<!-- random spinner -->
-				<input type="checkbox" class="btn-check" id="!spinrandom" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:spinrandom" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Spinners: Random movement offset each revolution:
 Slight offset in circular motion with each revolution of the spinner.">
 					SPIN RANDOM<br>
@@ -156,7 +157,7 @@ Slight offset in circular motion with each revolution of the spinner.">
 				</label>
 
 				<!-- human endurance -->
-				<input type="checkbox" class="btn-check" id="!humanendur" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:humanendur" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Simulate human hand endurance:
 Hands get “tired” after consecutive fast notes and increase hit error.">
 					HUMAN ENDUR<br>
@@ -166,7 +167,7 @@ Hands get “tired” after consecutive fast notes and increase hit error.">
 				</label>
 
 				<!-- human nervous -->
-				<input type="checkbox" class="btn-check" id="!humannerv" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:humannerv" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Simulate human nervousness at end of song:
 Player gets “nervous” approaching end of song and increases hit error.">
 					HUMAN NERV<br>
@@ -176,7 +177,7 @@ Player gets “nervous” approaching end of song and increases hit error.">
 				</label>
 
 				<!-- human distract -->
-				<input type="checkbox" class="btn-check" id="!huamndetent" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:huamndetent" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Simulate human distraction:
 Simulates a player getting distracted and desyncs play.">
 					HUMAN DETENT<br>
@@ -186,7 +187,7 @@ Simulates a player getting distracted and desyncs play.">
 				</label>
 
 				<!-- auto switch -->
-				<input type="checkbox" class="btn-check" id="!autoswitch" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:autoswitch" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Automatically switch:
 Automatically plays while there are no input from the user. Upon user input, stop the autopilot and let the user play.">
 					AUTO SWITCH<br>
@@ -196,7 +197,7 @@ Automatically plays while there are no input from the user. Upon user input, sto
 				</label>
 
 				<!-- auto switch -->
-				<input type="checkbox" class="btn-check" id="!tkoverstby" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:tkoverstby" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Takeover Standby:
 Automatically disengages upon user input">
 					TKOVR STBY<br>
@@ -206,7 +207,7 @@ Automatically disengages upon user input">
 				</label>
 
 				<!-- play detent -->
-				<input type="checkbox" class="btn-check" id="!playdetent" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:playdetent" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Play Detent:
 Automatically disengages and fails if accuracy on a hard (fast and quick notes) section is too high.">
 					DETENT STBY<br>
@@ -240,7 +241,11 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					</div>
 					<div class="input-box">
 						<small style="display:inline-block">SPINNER RAND AMT</small><br>
-						<input type="number" id="!targetloc-offset" style="width: 2em;" class="boeing-input" min="0" max="10000" value="050" data-digits="3"><br>
+						<input type="number" id="!targetloc-offset" style="width: 2em;" class="boeing-input" min="0" max="100" value="050" data-digits="3"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">DIFFICULTY OVRD</small><br>
+						<input type="number" id="!difficulty-override" style="width: 2em;" class="boeing-input" min="0" max="1000" value="000" data-digits="3"><br>
 					</div>
 				</div>
 			</div>
@@ -257,4 +262,5 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 
 <script src="../common/js/common.js"></script>
 <script src="main.js"></script>
+<script src="buttons.js"></script>
 </html>

@@ -10,6 +10,9 @@ using Autosu.Utils;
 using Autosu.classes;
 using Newtonsoft.Json;
 using WMPLib;
+using Autosu.Hooks;
+using Autosu.classes.autopilot;
+using Indieteur.GlobalHooks;
 
 namespace Autosu.Pages.SongSelect {
     public class SongSelectDownstream : Downstream {
@@ -23,7 +26,7 @@ namespace Autosu.Pages.SongSelect {
         }
 
         public override void BrowserReady() {
-            string path = Config.instance.beatmapPath;
+            string path = Config.instance.osuPath;
             if (Directory.Exists(path)) browser.ExecuteScriptAsync($"selectFiles(`{JsonConvert.SerializeObject(Config.instance.songData)}`, true)");
         }
 
@@ -32,7 +35,7 @@ namespace Autosu.Pages.SongSelect {
             if (!exists) return null;
 
             // write to cfg
-            Config.instance.beatmapPath = path;
+            Config.instance.osuPath = path;
             SerializationUtil.Save<Config>(CommonUtil.ParsePath("userdata/config.aosu"), Config.instance);
             return JsonConvert.SerializeObject(Config.instance.songData);
 
@@ -62,6 +65,15 @@ namespace Autosu.Pages.SongSelect {
                 bgPath = $@"{bmDir}\{bgName}",
             };
 
+        }
+
+        public void StartAutopilot(string title, string variation) {
+            // initialize autopilot
+            Beatmap bm = Beatmap.GetOne(title, variation);
+            Autopilot.Init(bm);
+
+            if (currentPreviewAudio != null) currentPreviewAudio.close();
+            form.SwitchPage<AutopilotPage>();
         }
 
     }

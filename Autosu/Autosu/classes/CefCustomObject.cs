@@ -20,6 +20,7 @@ namespace Autosu.Classes
         public virtual void BrowserReady() { }
         public virtual void OpenDev() {
             browser.ShowDevTools();
+            form.Invoke(form.Focus);
         }
 
     }

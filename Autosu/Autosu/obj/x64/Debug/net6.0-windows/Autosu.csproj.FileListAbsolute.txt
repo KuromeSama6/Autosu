@@ -265,3 +265,12 @@ D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\resources\common\logo.i
 D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\songSelect\img-placeholder.png
 D:\dev\Autosu\Autosu\Autosu\obj\x64\Debug\net6.0-windows\Interop.WMPLib.dll
 D:\dev\Autosu\Autosu\Autosu\obj\x64\Debug\net6.0-windows\Autosu.csproj.ResolveComReference.cache
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\EasyHook.dll
+D:\dev\Autosu\Autosu\Autosu\obj\x64\Debug\net6.0-windows\Autosu.AutopilotPage.resources
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\buttons.js
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\img-placeholder.png
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\index.html
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\main.css
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\main.js
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\resources\audio\alert.wav
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\Indieteur.GlobalHooks.dll

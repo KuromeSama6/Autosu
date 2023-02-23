@@ -8,6 +8,7 @@ using System.IO;
 using System.Text;
 using Autosu.Pages.SongSelect;
 using Autosu.classes;
+using Indieteur.GlobalHooks;
 
 namespace Autosu {
     public partial class SongSelectPage : Form {
@@ -27,9 +28,6 @@ namespace Autosu {
 
         void Awake() {
             instance = this;
-            CefSettings settings = new();
-
-            Cef.Initialize(settings);
 
             string uri = $"file://{CommonUtil.ParsePath("content/songSelect/index.html")}";
             browser = new(uri) {
@@ -48,8 +46,16 @@ namespace Autosu {
             //WindowState = FormWindowState.Maximized;
         }
 
+        public void SwitchPage<T>() where T: Form, new(){
+            Invoke((MethodInvoker) delegate {
+                T newPage = new();
+                newPage.Show();
+                Hide();
+            });
+        }
+
         private void OnClose(object sender, FormClosingEventArgs args) {
-            Environment.Exit(0);
+            if (Application.OpenForms.Count == 1) Environment.Exit(0);
         }
     }
 

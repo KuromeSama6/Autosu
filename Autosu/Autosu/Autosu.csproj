@@ -25,16 +25,40 @@
     <PackageReference Include="CefSharp.Common" Version="110.0.250" />
     <PackageReference Include="CefSharp.WinForms" Version="110.0.250" />
     <PackageReference Include="CefSharp.WinForms.NETCore" Version="110.0.250" />
+    <PackageReference Include="EasyHook" Version="2.7.7097" />
+    <PackageReference Include="Indieteur.GlobalHooks" Version="1.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="classes\constants\" />
     <Folder Include="content\" />
+    <Folder Include="external\" />
     <Folder Include="resources\common\" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Update="pages\Autopilot\AutopilotPage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="content\autopilot\buttons.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="content\autopilot\img-placeholder.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="content\autopilot\index.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="content\autopilot\main.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="content\autopilot\main.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Update="content\common\css\bootstrap.min.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
@@ -54,6 +78,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="content\songSelect\main.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="resources\audio\alert.wav">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="resources\common\logo.ico">

@@ -1,5 +1,7 @@
-﻿using Autosu.Classes;
+﻿using Autosu.classes;
+using Autosu.Classes;
 using Autosu.Enums;
+using Autosu.Exceptions;
 using Autosu.Utils;
 using System;
 using System.Collections.Generic;
@@ -28,6 +30,14 @@ namespace Autosu.Classes {
         public List<HitObject> objects;
 
         #endregion
+
+        public static Beatmap GetOne(string title, string variation) {
+            Beatmap? ret = null;
+            ret = Config.instance.beatmaps.Find((bm) => bm.title == title && bm.variation == variation);
+
+            if (ret == null) throw new BeatmapNotFoundException();
+            else return ret;
+        }
 
         public Beatmap(string path) {
             this.path = path;
