@@ -9,11 +9,14 @@ using System.Text;
 using Autosu.Pages.SongSelect;
 using Autosu.classes;
 using Indieteur.GlobalHooks;
+using Autosu.classes.autopilot;
 
 namespace Autosu {
     public partial class SongSelectPage : Form {
         public ChromiumWebBrowser browser = new();
         public static SongSelectPage instance;
+        public static GlobalKeyHook globalKeyHook = new();
+        public static GlobalMouseHook globalMouseHook = new();
 
         public SongSelectPage() {
             InitializeComponent();
@@ -44,6 +47,24 @@ namespace Autosu {
             browser.KeyboardHandler = new Std.KeyboardHandler();
 
             //WindowState = FormWindowState.Maximized;
+            globalKeyHook.OnKeyDown += MainKeyboardDown;
+            globalMouseHook.OnButtonDown += MainMouseDown;
+        }
+
+        private void MainKeyboardDown(object sender, GlobalKeyEventArgs e) {
+            if (AutopilotPage.instance != null) {
+                switch (e.KeyCode) {
+                    case VirtualKeycodes.Home: AutopilotPage.instance.visible = !AutopilotPage.instance.visible; break;
+                }
+            }
+        }
+
+        private void MainMouseDown(object sender, GlobalMouseEventArgs e) {
+            if (AutopilotPage.instance != null) {
+                switch (e.Button) {
+                    case GHMouseButtons.Left: Autopilot.Arm(); break;
+                }
+            }
         }
 
         public void SwitchPage<T>() where T: Form, new(){

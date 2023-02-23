@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using WMPLib;
 using Autosu.classes.autopilot;
 using System.Xml.Linq;
+using System.Numerics;
 
 namespace Autosu.Pages.Bot {
     public class AutopilotDownsream : Downstream {
@@ -40,6 +41,14 @@ namespace Autosu.Pages.Bot {
             return true;
         }
         
+        public object RequestCursorPosition() {
+            Vector2 pos = MouseUtil.RelativeMousePosition(new(Cursor.Position.X, Cursor.Position.Y));
+            return new { 
+                x = pos.X,
+                y = pos.Y
+            };
+        }
+
         public void ReturnToMenu() {
             form.ReturnToMenu();
         }

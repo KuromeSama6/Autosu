@@ -12,4 +12,11 @@ namespace Autosu.classes.autopilot {
         ON
     }
 
+    public enum EAutopilotArmState {
+        NOT_ARMED,
+        START_LISTEN,
+        MOUSE_LISTEN,
+        ARMED
+    }
+
 }

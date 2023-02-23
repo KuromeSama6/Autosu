@@ -18,9 +18,6 @@ namespace Autosu {
         public ChromiumWebBrowser browser = new();
         public static AutopilotPage? instance;
 
-
-        private static GlobalKeyHook _globalKeyHook = new();
-
         #region Overlay Driver
         [DllImport("user32.dll")]
         public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
@@ -37,12 +34,28 @@ namespace Autosu {
 
         public static bool gameHasLaunched;
 
+        private bool _visible = true;
+
         public AutopilotPage() {
             InitializeComponent();
             Load += OnLoad;
             FormClosing += OnClose;
             Awake();
 
+        }
+
+        public bool visible {
+            get => _visible;
+            set {
+                if (!gameHasLaunched) return;
+
+                Invoke(() => {
+                    SetOverlay(true, Autopilot.status < EAutopilotMasterState.ON);
+                    Opacity = !value ? 0f : Autopilot.status >= EAutopilotMasterState.ON ? 0.7f : 1f ;
+                });
+
+                _visible = value;
+            }
         }
 
         private void OnLoad(object sender, EventArgs e) {
@@ -68,11 +81,6 @@ namespace Autosu {
 
             WindowState = FormWindowState.Maximized;
 
-            // autopilot key notify
-            _globalKeyHook.OnKeyDown += (object sender, GlobalKeyEventArgs e) => {
-                if (e.KeyCode == VirtualKeycodes.Enter) ;
-            };
-
         }
 
         public void SetOverlay(bool isOverlay, bool handleInput) {
@@ -83,6 +91,7 @@ namespace Autosu {
                 StartPosition = FormStartPosition.Manual;
                 BackColor = Color.LightPink;
                 WindowState = FormWindowState.Maximized;
+                //Opacity = 0.7f;
 
                 // Set WS_EX_TRANSPARENT style on the overlay form
                 if (handleInput) SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) | WS_EX_TRANSPARENT);

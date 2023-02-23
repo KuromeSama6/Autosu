@@ -12,6 +12,8 @@ using System.Threading.Tasks;
 using WMPLib;
 using Indieteur.GlobalHooks;
 using System.Runtime.InteropServices;
+using System.Numerics;
+using CefSharp;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
@@ -65,19 +67,12 @@ namespace Autosu.classes.autopilot {
             thread.Start();
 
             status = EAutopilotMasterState.ARMED;
+            armState = EAutopilotArmState.START_LISTEN;
 
             /*globalKeyHook.OnKeyDown += (object sender, GlobalKeyEventArgs e) => {
                 MessageBox.Show("press");
             };*/
 
-        }
-
-        // Start Song
-        public static void StartSong() {
-            var audio = new WindowsMediaPlayer();
-            audio.URL = CommonUtil.ParsePath("resources/audio/alert.wav");
-            audio.settings.volume = 5;
-            audio.controls.play();
         }
 
         // Main autopilot cycle
@@ -87,22 +82,29 @@ namespace Autosu.classes.autopilot {
 
             switch (status) {
                 case EAutopilotMasterState.ARMED:
+                    ArmUpdate();
                     break;
             }
             
 
             // check for game start
-            if (!AutopilotPage.gameHasLaunched) {
-                Process[] procs = Process.GetProcessesByName("osu!");
-                if (procs.Length == 1) {
-                    Process proc = procs[0];
-                    AutopilotPage.instance.Invoke(() => {
-                        AutopilotPage.instance.SetOverlay(true, true);
+            Process[] procs = Process.GetProcessesByName("osu!");
+            if (!AutopilotPage.gameHasLaunched && procs.Length == 1) {
+                Process proc = procs[0];
+                AutopilotPage.instance.Invoke(() => {
+                    AutopilotPage.instance.SetOverlay(true, true);
 
-                        AutopilotPage.gameHasLaunched = true;
-                    });
                     AutopilotPage.gameHasLaunched = true;
-                }
+                });
+                AutopilotPage.gameHasLaunched = true;
+
+            } else if (AutopilotPage.gameHasLaunched && procs.Length != 1) {
+                AutopilotPage.instance.Invoke(() => {
+                    AutopilotPage.instance.SetOverlay(false, true);
+                    AutopilotPage.instance.visible = true;
+
+                    AutopilotPage.gameHasLaunched = false;
+                });
             }
 
         }

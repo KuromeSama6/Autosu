@@ -9,6 +9,7 @@ using Newtonsoft.Json;
 using System.Windows.Forms.VisualStyles;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace Autosu.Utils {
     public static class CommonUtil {
@@ -101,6 +102,11 @@ namespace Autosu.Utils {
             }
 
             return hDesk;
+        }
+
+        public static async void DelayedCall(Action call, float delay) {
+            await Task.Delay((int) (delay * 1000));
+            call.Invoke();
         }
 
     }

@@ -73,6 +73,7 @@ namespace Autosu.Pages.SongSelect {
             Autopilot.Init(bm);
 
             if (currentPreviewAudio != null) currentPreviewAudio.close();
+            currentPreviewAudio.close();
             form.SwitchPage<AutopilotPage>();
         }
 

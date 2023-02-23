@@ -55,3 +55,9 @@ upstream.initAutopilot().then(res => {
 });
 
 upstream.openDev();
+
+setInterval(() => {
+    upstream.requestCursorPosition().then(pos => {
+        _("$test-ident", `Mouse position: [${pos.x}, ${pos.y}]`)
+    })
+}, 1)
