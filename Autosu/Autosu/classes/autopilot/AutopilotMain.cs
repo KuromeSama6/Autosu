@@ -11,6 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WMPLib;
 using Indieteur.GlobalHooks;
+using System.Runtime.InteropServices;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
@@ -29,7 +30,11 @@ namespace Autosu.classes.autopilot {
         #endregion
 
         #region Fields - Misc
-        //private static GlobalKeyHook globalKeyHook = new();
+        [DllImport("user32.dll")]
+        static extern IntPtr GetProcessWindowStation();
+
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        static extern int GetUserObjectInformation(IntPtr hObj, int nIndex, IntPtr pvInfo, int nLength, out int lpnLengthNeeded);
         #endregion
 
         public static void Init(Beatmap beatmap) {
@@ -47,9 +52,7 @@ namespace Autosu.classes.autopilot {
 
                     nextUpdateTime += 1;
 
-                    try {
-                        Update();
-                    } catch { }
+                    Update();
 
                     while (cycleTimer.ElapsedMilliseconds < nextUpdateTime) {
                         Thread.Sleep(0);
@@ -80,9 +83,26 @@ namespace Autosu.classes.autopilot {
         // Main autopilot cycle
         // Time: 1ms
         public static void Update() {
+            if (AutopilotPage.instance == null) return;
+
             switch (status) {
                 case EAutopilotMasterState.ARMED:
                     break;
+            }
+            
+
+            // check for game start
+            if (!AutopilotPage.gameHasLaunched) {
+                Process[] procs = Process.GetProcessesByName("osu!");
+                if (procs.Length == 1) {
+                    Process proc = procs[0];
+                    AutopilotPage.instance.Invoke(() => {
+                        AutopilotPage.instance.SetOverlay(true, true);
+
+                        AutopilotPage.gameHasLaunched = true;
+                    });
+                    AutopilotPage.gameHasLaunched = true;
+                }
             }
 
         }

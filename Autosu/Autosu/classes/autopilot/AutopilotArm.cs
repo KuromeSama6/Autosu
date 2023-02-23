@@ -16,7 +16,7 @@ namespace Autosu.classes.autopilot {
     public partial class Autopilot {
         // Listens for key press on computer
         public static void Arm() {
-            MessageBox.Show("press");
+
         }
 
     }

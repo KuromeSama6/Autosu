@@ -6,9 +6,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using System.Windows.Forms.VisualStyles;
+using System.Diagnostics;
+using System.Runtime.InteropServices;
 
 namespace Autosu.Utils {
     public static class CommonUtil {
+        [DllImport("user32.dll")]
+        static extern IntPtr GetProcessWindowStation();
+        [DllImport("user32.dll", CharSet = CharSet.Unicode)]
+        static extern int GetUserObjectInformation(IntPtr hObj, int nIndex, IntPtr pvInfo, int nLength, out int lpnLengthNeeded);
+        [DllImport("user32.dll", SetLastError = true, CharSet = CharSet.Unicode)]
+        static extern IntPtr OpenDesktop(string lpszDesktop, uint dwFlags, bool fInherit, uint dwDesiredAccess);
+        [DllImport("user32.dll")]
+        static extern IntPtr GetThreadDesktop(int dwThreadId);
+
         public static string ParsePath(string path) {
             return $"{Application.StartupPath}{path.Replace("/", "\\")}";
         }
@@ -60,6 +72,35 @@ namespace Autosu.Utils {
                 }
             }
             return ret;
+        }
+
+        public static IntPtr GetDesktopHandle(Process proc) {
+            IntPtr hWinSta = GetProcessWindowStation();
+            IntPtr hDesk = IntPtr.Zero;
+
+            int needed;
+            if (GetUserObjectInformation(hWinSta, 2, IntPtr.Zero, 0, out needed) == 0) {
+                IntPtr buffer = Marshal.AllocHGlobal(needed);
+                if (GetUserObjectInformation(hWinSta, 2, buffer, needed, out needed) != 0) {
+                    string desktop = Marshal.PtrToStringUni(buffer);
+                    hDesk = OpenDesktop(desktop, 0, false, 0);
+                }
+                Marshal.FreeHGlobal(buffer);
+            }
+
+            if (hDesk != IntPtr.Zero) {
+                // Retrieve the desktop associated with the input process
+                IntPtr hProcessDesk = GetThreadDesktop(proc.Threads[0].Id);
+                if (hProcessDesk != IntPtr.Zero) {
+                    MessageBox.Show(string.Format("Desktop handle: {0}", hProcessDesk));
+                } else {
+                    MessageBox.Show("Failed to get desktop handle for process");
+                }
+            } else {
+                MessageBox.Show("Failed to get desktop handle for window station");
+            }
+
+            return hDesk;
         }
 
     }

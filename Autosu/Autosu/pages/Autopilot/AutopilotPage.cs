@@ -11,6 +11,7 @@ using Autosu.classes;
 using Autosu.Pages.Bot;
 using Autosu.classes.autopilot;
 using Indieteur.GlobalHooks;
+using System.Runtime.InteropServices;
 
 namespace Autosu {
     public partial class AutopilotPage : Form {
@@ -19,6 +20,22 @@ namespace Autosu {
 
 
         private static GlobalKeyHook _globalKeyHook = new();
+
+        #region Overlay Driver
+        [DllImport("user32.dll")]
+        public static extern int SetWindowLong(IntPtr hWnd, int nIndex, int dwNewLong);
+
+        [DllImport("user32.dll", SetLastError = true)]
+        public static extern int GetWindowLong(IntPtr hWnd, int nIndex);
+        [DllImport("user32.dll")]
+        public static extern bool SetThreadDesktop(IntPtr hDesktop);
+
+        private const int GWL_EXSTYLE = -20;
+        private const int WS_EX_TOPMOST = 0x8;
+        private const int WS_EX_TRANSPARENT = 0x20;
+        #endregion
+
+        public static bool gameHasLaunched;
 
         public AutopilotPage() {
             InitializeComponent();
@@ -53,8 +70,40 @@ namespace Autosu {
 
             // autopilot key notify
             _globalKeyHook.OnKeyDown += (object sender, GlobalKeyEventArgs e) => {
-                if (e.KeyCode == VirtualKeycodes.Enter) Autopilot.Arm();
+                if (e.KeyCode == VirtualKeycodes.Enter) ;
             };
+
+        }
+
+        public void SetOverlay(bool isOverlay, bool handleInput) {
+            if (isOverlay) {
+                FormBorderStyle = FormBorderStyle.None;
+                ShowInTaskbar = false;
+                TopMost = true;
+                StartPosition = FormStartPosition.Manual;
+                BackColor = Color.LightPink;
+                WindowState = FormWindowState.Maximized;
+
+                // Set WS_EX_TRANSPARENT style on the overlay form
+                if (handleInput) SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) | WS_EX_TRANSPARENT);
+                else SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) & ~WS_EX_TRANSPARENT);
+
+                // Set the position of the overlay form
+                Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width, 0);
+
+            } else {
+                TopMost = true;
+                FormBorderStyle = FormBorderStyle.FixedSingle;
+                // Remove WS_EX_TOPMOST and WS_EX_TRANSPARENT styles
+                SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) & ~WS_EX_TOPMOST & ~WS_EX_TRANSPARENT);
+
+                // Show the window in the taskbar
+                ShowInTaskbar = true;
+            }
+        }
+
+        public void SetDesktop(IntPtr desktop) {
+            SetThreadDesktop(desktop);
         }
 
         public void ReturnToMenu() {
