@@ -105,3 +105,31 @@ input::-webkit-inner-spin-button {
 input[type=number] {
   -moz-appearance: textfield;
 }
+
+.annunciator {
+    border: 1px solid gray;
+    width: 6em;
+    height: 3em;
+    text-align: center;
+    color: gray;
+    margin-right: 0.4em;
+    font-family: monospace;
+    line-height: 1em;
+    padding-top: 0.4em;
+}
+
+.annunciator.green {
+    border: 1px solid #64ff5b;
+    color: #64ff5b;
+    background-color: #64ff5b22;
+}
+
+.annunciator.amber {
+    border: 1px solid #ff9d39;
+    color: #ff9d39;
+    background-color: #ff9d3922;
+}
+
+.annunciator.clickable {
+    cursor: pointer;
+}
