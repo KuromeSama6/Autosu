@@ -36,7 +36,7 @@ namespace Autosu.Pages.SongSelect {
 
             // write to cfg
             Config.instance.osuPath = path;
-            SerializationUtil.Save<Config>(CommonUtil.ParsePath("userdata/config.aosu"), Config.instance);
+            SerializationUtil.Save(CommonUtil.ParsePath("userdata/config.aosu"), Config.instance);
             return JsonConvert.SerializeObject(Config.instance.songData);
 
         }

@@ -43,10 +43,13 @@ A status indicator can be:
 3. Green - Active. Often indicates a module is armed or running.
 
 - `A/P`
-	- Amber: Autopilot is armed and is waiting for song to start.
-	- Green: Autopilot is running.
+	- Amber: Autopilot is enabled but not at full capacity yet.
+	- Green: Autopilot is at full capacity.
+- `A/P ARM`
+	- Amber: Autopilot is armed and is awaiting song start.
+	- Green: Song cycle has already started..
 - `A/P P/RST`
-	- Amber Flash: Autopilot has been disengage. Push this button to suppress warning.
+	- Amber Flash: Autopilot has been (soft) disengaged. Push this button to suppress warning.
 - `OPMDE SWITCH`
 	- Amber: Auto-switch is armed and is awating user input.
 	- Green: Auto-switch is allowing human input and disables bot input.

@@ -18,13 +18,19 @@ using CefSharp;
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
         public static Beatmap beatmap;
+        public static APConfig config = new();
 
         #region Fields - Threading and Timing related
-        public static Thread thread;
-        public static readonly Stopwatch cycleTimer = new();
-        public static System.Threading.Timer threadTimer;
-        public static long nextUpdateTime;
-        public static bool keepGoing { get; private set; }
+        private static Stopwatch playhead = new();
+        public static int time => (int) playhead.ElapsedMilliseconds;
+        private static Thread thread;
+        private static readonly Stopwatch cycleTimer = new();
+        private static System.Threading.Timer threadTimer;
+        private static long nextUpdateTime;
+        private static bool keepGoing = true;
+        private static HighAccuracyTimer highAccuracyTimer = new(NavMouseUpdate, 1);
+        public static Stopwatch sysLatencyTimer = new();
+        public static int sysLatency { get; private set; }
         #endregion
 
         #region Fields - Status Related
@@ -66,9 +72,6 @@ namespace Autosu.classes.autopilot {
             cycleTimer.Start();
             thread.Start();
 
-            status = EAutopilotMasterState.ARMED;
-            armState = EAutopilotArmState.START_LISTEN;
-
             /*globalKeyHook.OnKeyDown += (object sender, GlobalKeyEventArgs e) => {
                 MessageBox.Show("press");
             };*/
@@ -80,19 +83,28 @@ namespace Autosu.classes.autopilot {
         public static void Update() {
             if (AutopilotPage.instance == null) return;
 
+            // sys latency
+            sysLatencyTimer.Stop();
+            sysLatency = (int)sysLatencyTimer.ElapsedMilliseconds;
+            sysLatencyTimer.Restart();
+
             switch (status) {
-                case EAutopilotMasterState.ARMED:
+                case EAutopilotMasterState.ON:
                     ArmUpdate();
                     break;
             }
-            
+
+            // nav update
+            if (status >= EAutopilotMasterState.ON) {
+                MnavUpdate();
+            }
 
             // check for game start
             Process[] procs = Process.GetProcessesByName("osu!");
             if (!AutopilotPage.gameHasLaunched && procs.Length == 1) {
                 Process proc = procs[0];
                 AutopilotPage.instance.Invoke(() => {
-                    AutopilotPage.instance.SetOverlay(true, true);
+                    AutopilotPage.instance.SetOverlay(true, false);
 
                     AutopilotPage.gameHasLaunched = true;
                 });
@@ -109,11 +121,14 @@ namespace Autosu.classes.autopilot {
 
         }
 
+
         public static void Disengage(bool silent = false) {
 
         }
 
         public static void Dispose() {
+            highAccuracyTimer.Stop();
+            keepGoing = false;
             threadTimer.Dispose();
             thread.Join();
         }

@@ -11,20 +11,27 @@ using WMPLib;
 namespace Autosu.Utils {
     public static class APUtil {
         public static Vector2 OsuPixelToScreen(Vector2 osuPixel) {
-            int osuScreenWidth = 640;
-            int osuScreenHeight = 480;
+            // playfield height = 80% resln height
+            // width = 4/3 * playfield height
+            // Osupixel ref 640x840 is based on playfield not screen
 
-            Rectangle screenBounds = Screen.GetBounds(Point.Empty);
-            int screenWidth = screenBounds.Width;
-            int screenHeight = screenBounds.Height;
+            // Calculate the dimensions of the playingArea based on screen resolution
+            int screenWidth = Screen.PrimaryScreen.Bounds.Width;
+            int screenHeight = Screen.PrimaryScreen.Bounds.Height;
+            int playingAreaHeight = (int) (screenHeight * 0.8);
+            int playingAreaWidth = (int) (playingAreaHeight * 4 / 3);
 
-            float xScale = (float) screenWidth / osuScreenWidth;
-            float yScale = (float) screenHeight / osuScreenHeight;
+            int playingAreaY = (int) (screenHeight * 0.02);
 
-            int screenX = (int) (osuPixel.X * xScale);
-            int screenY = (int) (osuPixel.Y * yScale);
+            // Calculate the scale factor to convert osuPixels to actual screen pixels
+            float scaleX = (float) playingAreaWidth / 512f;
+            float scaleY = (float) playingAreaHeight / 384f;
 
-            return new(screenX, screenY);
+            // Calculate the actual screen position of the osuPixel
+            float actualX = osuPixel.X * scaleX + (screenWidth - playingAreaWidth) / 2f;
+            float actualY = osuPixel.Y * scaleY + playingAreaY + (screenHeight - playingAreaHeight) / 2f;
+
+            return new Vector2(actualX, actualY);
         }
 
         public static void PlayAnnunciatorAlert() {

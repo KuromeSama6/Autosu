@@ -8,8 +8,9 @@ namespace Autosu.classes.autopilot {
     public enum EAutopilotMasterState {
         OFF,
         DISENGAGE_WARN,
-        ARMED,
-        ON
+        ARM,
+        ON,
+        FULL
     }
 
     public enum EAutopilotArmState {
@@ -17,6 +18,12 @@ namespace Autosu.classes.autopilot {
         START_LISTEN,
         MOUSE_LISTEN,
         ARMED
+    }
+    
+    public enum EAnnunciatorState {
+        OFF,
+        AMBER,
+        GREEN
     }
 
 }

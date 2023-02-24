@@ -80,6 +80,28 @@
     text-align: center;
 }
 
+.text-input {
+    background: black !important;
+    border-radius: 1px !important;
+    border: 1px solid white !important;
+    font-family: monospace;
+    margin: 3px;
+    font-size: 1em;
+    color: white;
+    caret-color: black;
+}
+
+.text-button {
+    background: black !important;
+    border-radius: 1px !important;
+    border: 1px solid white !important;
+    font-family: monospace;
+    margin: 3px;
+    font-size: 1em;
+    color: white;
+    caret-color: black;
+}
+
 .boeing-input::selection{
     background-color: black;
     color: white;
@@ -132,4 +154,36 @@ input[type=number] {
 
 .annunciator.clickable {
     cursor: pointer;
+}
+
+.annunciator.clickable.amber {
+    animation: annunciator-flash 0.75s infinite;
+    
+}
+
+.manual ol, ul{
+    font-size: small;
+}
+
+@keyframes annunciator-flash {
+    0% {
+        border: 1px solid gray;
+        color: gray;
+        background-color: #0000;
+    }
+    49.99% {
+        border: 1px solid gray;
+        color: gray;
+        background-color: #0000;
+    }
+    50% {
+        border: 1px solid #ff9d39;
+        color: #ff9d39;
+        background-color: #ff9d3922;
+    }
+    100% {
+        border: 1px solid #ff9d39;
+        color: #ff9d39;
+        background-color: #ff9d3922;
+    }
 }

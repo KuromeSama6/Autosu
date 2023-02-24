@@ -10,7 +10,7 @@ namespace Autosu.Utils {
     public static class SerializationUtil {
         public static bool doNotSave = false;
 
-        public static bool Save<T>(string path, object saveData) {
+        public static bool Save(string path, object saveData) {
             if (doNotSave) return true;
 
             BinaryFormatter bf = GetBinaryFormatter();

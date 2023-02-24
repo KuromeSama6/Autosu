@@ -41,6 +41,9 @@
     <Compile Update="pages\Autopilot\AutopilotPage.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Update="pages\Debug\DebugOverlay.cs">
+      <SubType>Form</SubType>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>

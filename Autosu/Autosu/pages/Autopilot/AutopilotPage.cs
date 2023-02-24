@@ -1,5 +1,3 @@
-using CefSharp;
-using CefSharp.WinForms;
 using Autosu.Classes;
 using Autosu.Utils;
 using System;
@@ -12,6 +10,8 @@ using Autosu.Pages.Bot;
 using Autosu.classes.autopilot;
 using Indieteur.GlobalHooks;
 using System.Runtime.InteropServices;
+using CefSharp.WinForms;
+using CefSharp;
 
 namespace Autosu {
     public partial class AutopilotPage : Form {
@@ -94,7 +94,7 @@ namespace Autosu {
                 //Opacity = 0.7f;
 
                 // Set WS_EX_TRANSPARENT style on the overlay form
-                if (handleInput) SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) | WS_EX_TRANSPARENT);
+                if (!handleInput) SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) | WS_EX_TRANSPARENT);
                 else SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) & ~WS_EX_TRANSPARENT);
 
                 // Set the position of the overlay form
@@ -104,7 +104,6 @@ namespace Autosu {
                 TopMost = true;
                 FormBorderStyle = FormBorderStyle.FixedSingle;
                 // Remove WS_EX_TOPMOST and WS_EX_TRANSPARENT styles
-                SetWindowLong(Handle, GWL_EXSTYLE, GetWindowLong(Handle, GWL_EXSTYLE) & ~WS_EX_TOPMOST & ~WS_EX_TRANSPARENT);
 
                 // Show the window in the taskbar
                 ShowInTaskbar = true;

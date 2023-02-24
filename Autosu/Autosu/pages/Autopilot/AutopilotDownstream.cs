@@ -36,16 +36,55 @@ namespace Autosu.Pages.Bot {
             };
         }
 
-        public bool FeatureControlChanged(string name, bool enable) {
-
-            return true;
+        public bool FeatureControlChange(string name, bool enable) {
+            return Autopilot.ProcessFeatureChange(name, enable);
         }
         
+        public object RequestAnnunciatorStatus() {
+            return new {
+                ap_main = Autopilot.status switch {
+                    EAutopilotMasterState.ON => EAnnunciatorState.AMBER,
+                    EAutopilotMasterState.FULL => EAnnunciatorState.GREEN,
+                    _ => EAnnunciatorState.OFF
+                },
+                ap_arm = Autopilot.armState switch {
+                    EAutopilotArmState.NOT_ARMED => EAnnunciatorState.OFF,
+                    EAutopilotArmState.ARMED => EAnnunciatorState.GREEN,
+                    _ => EAnnunciatorState.AMBER
+                },
+                ap_warn = Autopilot.status == EAutopilotMasterState.DISENGAGE_WARN,
+                opmode_switch = Autopilot.config.features.autoSwitch ? Autopilot.isHumanInput ? EAnnunciatorState.GREEN : EAnnunciatorState.AMBER : EAnnunciatorState.OFF,
+                acc = Autopilot.status == EAutopilotMasterState.FULL ? EAnnunciatorState.GREEN : EAnnunciatorState.OFF,
+                mnav_desync = Autopilot.mnavDesyncWarn,
+            };
+        }
+
+        public void SuppressAnnunciator(string type) {
+            switch (type) {
+                case "mnav-desync":
+                    Autopilot.mnavDesyncWarn = false;
+                    break;
+            }
+        }
+
         public object RequestCursorPosition() {
             Vector2 pos = MouseUtil.RelativeMousePosition(new(Cursor.Position.X, Cursor.Position.Y));
             return new { 
                 x = pos.X,
                 y = pos.Y
+            };
+        }
+
+        public object GetNextObject() {
+            if (Autopilot.status < EAutopilotMasterState.ON) return null;
+            return new {
+                time = Autopilot.mnavTarget.time - Autopilot.time,
+                x = APUtil.OsuPixelToScreen(Autopilot.mnavTarget.pos).X,
+                y = APUtil.OsuPixelToScreen(Autopilot.mnavTarget.pos).Y,
+                xc = Cursor.Position.X,
+                yc = Cursor.Position.Y,
+                queueLength = Autopilot.mouseMoveQueue.Count,
+                sysLatency = Autopilot.sysLatency,
             };
         }
 

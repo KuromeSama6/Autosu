@@ -6,14 +6,9 @@ using System.Threading.Tasks;
 
 namespace Autosu.Enums {
     public enum EHitObjectType {
-        CIRCLE = 0,
-        SLIDER = 1,
-        SPINNER = 3,
-        NEWCOMBO = 2,
-        COMBOSKIP1 = 4,
-        COMBOSKIP2 = 5,
-        COMBOSKIP3 = 6,
-        OSUMANIA_HOLD = 7
+        CIRCLE,
+        SLIDER,
+        SPINNER
     }
 
     public enum ESliderCurveType {
