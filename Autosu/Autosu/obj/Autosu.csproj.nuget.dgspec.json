@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[1.0.0, )"
             },
+            "InputSimulator": {
+              "target": "Package",
+              "version": "[1.0.4, )"
+            },
             "Newtonsoft.Json": {
               "target": "Package",
               "version": "[13.0.2, )"

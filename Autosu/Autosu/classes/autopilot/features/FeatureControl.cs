@@ -6,22 +6,24 @@ using System.Threading.Tasks;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
-        public static bool ProcessFeatureChange(string name, bool enable) {
+        public void ProcessFeatureChange(string name, bool enable) {
             switch (name) {
                 // main cmd
                 case "cmd":
-                    if (enable) return false;
+                    if (enable) return;
                     if (status == EAutopilotMasterState.OFF && armState == EAutopilotArmState.NOT_ARMED) {
                         status = EAutopilotMasterState.ARM;
                         armState = EAutopilotArmState.START_LISTEN;
 
-                        return true;
+                        return;
                     }
                     break;
 
-            }
+                case "n1":
+                    if (status <= EAutopilotMasterState.ARM) config.features.n1 = !config.features.n1;
+                    break;
 
-            return false;
+            }
         }
 
     }

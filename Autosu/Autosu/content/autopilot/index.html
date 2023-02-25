@@ -74,12 +74,15 @@
 				<div class="annunciator align-items-center" id="$annc:ap-arm">A/P<br>ARM</div>
 				<div class="annunciator align-items-center" id="$annc:opmode-switch">OPMODE<br>SWITCH</div>
 				<div class="annunciator align-items-center" id="$annc:acc">HNAV<br>ACC</div>
+				<div class="annunciator align-items-center" id="$annc:nav-mode">HNAV<br>READY</div>
+				<div class="annunciator align-items-center" id="$annc:mnav-queue">MNAV<br>QUEUE</div>
 			</div>
 		</div>
 		<div class="row individual-box">
 			<div class="d-flex flex-row">
 				<div class="annunciator align-items-center clickable" id="$annc:ap-warn">A/P<br>P/RST</div>
 				<div class="annunciator align-items-center clickable" id="$annc:mnav-desync">MNAV<br>DESYNC</div>
+				<div class="annunciator align-items-center clickable" id="$annc:hnav-fault">HNAV<br>FAULT</div>
 			</div>
 		</div>
 		<div class="row">
@@ -223,7 +226,7 @@ Player gets “nervous” approaching end of song and increases hit error.">
 				</label>
 
 				<!-- human distract -->
-				<input type="checkbox" class="btn-check togglebtn" id="toggle:huamndetent" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:humandetent" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Simulate human distraction:
 Simulates a player getting distracted and desyncs play.">
 					HUMAN DETENT<br>
@@ -243,7 +246,7 @@ Automatically plays while there are no input from the user. Upon user input, sto
 				</label>
 
 				<!-- auto switch -->
-				<input type="checkbox" class="btn-check togglebtn" id="toggle:tkoverstby" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:tkovrstby" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Takeover Standby:
 Automatically disengages upon user input">
 					TKOVR STBY<br>
@@ -253,7 +256,7 @@ Automatically disengages upon user input">
 				</label>
 
 				<!-- play detent -->
-				<input type="checkbox" class="btn-check togglebtn" id="toggle:playdetent" autocomplete="off">
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:detentstby" autocomplete="off">
 				<label class="btn btn-primary" for="btn-check" title="Play Detent:
 Automatically disengages and fails if accuracy on a hard (fast and quick notes) section is too high.">
 					DETENT STBY<br>

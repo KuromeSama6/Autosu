@@ -68,6 +68,12 @@ function setAnnuciator(ele, value){
     }
 }
 
+function setToggle(name, value){
+    var button = $g(`toggle:${name}`);
+    var enableIndicator = button.nextElementSibling.querySelector(".d-flex").querySelector(".enable-indicator");
+    enableIndicator.hidden = !value;
+}
+
 upstream.initAutopilot().then(res => {
     $g("preview-img").src = res.bgPath;
     _("$chosen-beatmap-title", res.bmTitle);
@@ -78,6 +84,30 @@ upstream.initAutopilot().then(res => {
 $g("@disengage").nextElementSibling.addEventListener("click", () => returnToMenu());
 
 upstream.openDev();
+
+$g("@profile-read").addEventListener("click", () => {
+    var name = $g("!profile-load").value || $g("!profile-load").placeholder;
+
+    upstream.readProfile(name).then(res => {
+        $g("!profile-load").value = "";
+        if (!res.ok) {
+            $g("!profile-load").value = res.msg;
+            setTimeout(() => $g("!profile-load").value = "", 1000);
+        } else {
+            $g("!profile-load").placeholder = name;
+        }
+    });
+});
+
+$g("@profile-write").addEventListener("click", () => {
+    var name = $g("!profile-load").value || $g("!profile-load").placeholder;
+
+    upstream.writeProfile(name).then(msg => {
+        $g("!profile-load").placeholder = name;
+        $g("!profile-load").value = msg;
+        setTimeout(() => $g("!profile-load").value = "", 1000);
+    });
+});
 
 setInterval(() => {
     upstream.requestCursorPosition().then(pos => {
@@ -99,9 +129,35 @@ setInterval(() => {
         }
     })
 
+    upstream.requestTogglebtnStatus().then(res => {
+        res = JSON.parse(res);
+        var f = res.features;
+        
+        setToggle("cmd", res.cmdEnable);
+        setToggle("hnav", f.hnav);
+        setToggle("mnav", f.mnav);
+        setToggle("n1", f.n1);
+        setToggle("delayhit", f.hitDelay);
+        setToggle("accsel", f.accuracySelect);
+        setToggle("delaymove", f.moveDelay);
+        setToggle("targetoffset", f.targetOffset);
+        setToggle("blankmouse", f.blankAddMouse);
+        setToggle("slidermvnt", f.humanSlider);
+        setToggle("sliderhalt", f.shortSliderHalt);
+        setToggle("spinoffset", f.spinnerOffset);
+        setToggle("spinrandom", f.spinnerRandom);
+        setToggle("humanendur", f.humanEndurance);
+        setToggle("humannerv", f.humanNervous);
+        setToggle("humandetent", f.humanDistraction);
+        setToggle("autoswitch", f.autoSwitch);
+        setToggle("tkovrstby", f.takeoverStandby);
+        setToggle("detentstby", f.panic);
+
+    });
+
     upstream.getNextObject().then(res => {
         if (!res) return;
-        _("$next-object", `[${res.x}, ${res.y}] in ${res.time}ms. ${res.queueLength} MNAVs, ${res.sysLatency}ms System Clock Latency.`)
+        _("$next-object", `[${res.x}, ${res.y}] in ${res.time}ms. ${res.queueLength} MNAVs. ${res.extraData} Aborts.`)
     });
 
 }, 1)

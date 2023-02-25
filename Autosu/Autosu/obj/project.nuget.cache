@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "gXt3LjZ6KkWMMYVNi/7I+ru9CeofwghjY6ANwCGcwpmZxefL2wXlbjcaQwYu0mHNqkEeEAjxNs+SJGZb4/cheg==",
+  "dgSpecHash": "2VNsrxZ3c37R9kUeL2vEY3fpgPPVUl6zv3u2QNJBPotuOypstQJgNzT4TZgs9LOpxboWZfNHKgiQOSygoYV/cA==",
   "success": true,
   "projectFilePath": "D:\\dev\\Autosu\\Autosu\\Autosu\\Autosu.csproj",
   "expectedPackageFiles": [
@@ -16,6 +16,7 @@
     "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x86\\110.0.25\\chromiumembeddedframework.runtime.win-x86.110.0.25.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\easyhook\\2.7.7097\\easyhook.2.7.7097.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\indieteur.globalhooks\\1.0.0\\indieteur.globalhooks.1.0.0.nupkg.sha512",
+    "C:\\Users\\1chan\\.nuget\\packages\\inputsimulator\\1.0.4\\inputsimulator.1.0.4.nupkg.sha512",
     "C:\\Users\\1chan\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
   ],
   "logs": [
@@ -45,6 +46,16 @@
       "warningLevel": 1,
       "message": "Package 'Indieteur.GlobalHooks 1.0.0' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
       "libraryId": "Indieteur.GlobalHooks",
+      "targetGraphs": [
+        "net6.0-windows7.0"
+      ]
+    },
+    {
+      "code": "NU1701",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "Package 'InputSimulator 1.0.4' was restored using '.NETFramework,Version=v4.6.1, .NETFramework,Version=v4.6.2, .NETFramework,Version=v4.7, .NETFramework,Version=v4.7.1, .NETFramework,Version=v4.7.2, .NETFramework,Version=v4.8, .NETFramework,Version=v4.8.1' instead of the project target framework 'net6.0-windows7.0'. This package may not be fully compatible with your project.",
+      "libraryId": "InputSimulator",
       "targetGraphs": [
         "net6.0-windows7.0"
       ]

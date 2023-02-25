@@ -12,6 +12,9 @@ using Indieteur.GlobalHooks;
 using Autosu.classes.autopilot;
 using Newtonsoft.Json;
 using System.Linq;
+using Autosu.utils;
+using WindowsInput;
+using WindowsInput.Native;
 
 namespace Autosu {
     public partial class SongSelectPage : Form {
@@ -47,7 +50,7 @@ namespace Autosu {
 
             browser.MenuHandler = new Std.MenuHandler();
             browser.KeyboardHandler = new Std.KeyboardHandler();
-
+            
             //WindowState = FormWindowState.Maximized;
             globalKeyHook.OnKeyDown += MainKeyboardDown;
             globalMouseHook.OnButtonDown += MainMouseDown;
@@ -55,10 +58,7 @@ namespace Autosu {
 
         private void MainKeyboardDown(object sender, GlobalKeyEventArgs e) {
             if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.End) Environment.Exit(0);
-            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.PageDown) {
-                DebugOverlay form = new DebugOverlay();
-                form.Show();
-            }
+            if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryCalib();
 
             if (AutopilotPage.instance != null) {
                 switch (e.KeyCode) {
@@ -74,7 +74,7 @@ namespace Autosu {
         private void MainMouseDown(object sender, GlobalMouseEventArgs e) {
             if (AutopilotPage.instance != null) {
                 switch (e.Button) {
-                    case GHMouseButtons.Left: Autopilot.Arm(); break;
+                    case GHMouseButtons.Left: Autopilot.i.Arm(); break;
                 }
             }
         }

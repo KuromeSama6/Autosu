@@ -50,8 +50,8 @@ namespace Autosu {
                 if (!gameHasLaunched) return;
 
                 Invoke(() => {
-                    SetOverlay(true, Autopilot.status < EAutopilotMasterState.ON);
-                    Opacity = !value ? 0f : Autopilot.status >= EAutopilotMasterState.ON ? 0.7f : 1f ;
+                    SetOverlay(true, Autopilot.i.status < EAutopilotMasterState.ON);
+                    Opacity = !value ? 0f : Autopilot.i.status >= EAutopilotMasterState.ON ? 0.7f : 1f ;
                 });
 
                 _visible = value;
@@ -124,7 +124,7 @@ namespace Autosu {
         private void OnClose(object sender, FormClosingEventArgs args) {
             // do not forget to dispose autopilot
             instance = null;
-            Autopilot.Dispose();
+            Autopilot.i.Dispose();
             SongSelectPage.instance.Show();
         }
     }

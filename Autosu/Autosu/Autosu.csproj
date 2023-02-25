@@ -27,6 +27,7 @@
     <PackageReference Include="CefSharp.WinForms.NETCore" Version="110.0.250" />
     <PackageReference Include="EasyHook" Version="2.7.7097" />
     <PackageReference Include="Indieteur.GlobalHooks" Version="1.0.0" />
+    <PackageReference Include="InputSimulator" Version="1.0.4" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 

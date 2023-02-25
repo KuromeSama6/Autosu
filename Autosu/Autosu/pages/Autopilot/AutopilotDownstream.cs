@@ -25,7 +25,7 @@ namespace Autosu.Pages.Bot {
         }
 
         public object InitAutopilot() {
-            Beatmap bm = Autopilot.beatmap;
+            Beatmap bm = Autopilot.i.beatmap;
 
             // return the data to put into autopilot
 
@@ -36,33 +36,39 @@ namespace Autosu.Pages.Bot {
             };
         }
 
-        public bool FeatureControlChange(string name, bool enable) {
-            return Autopilot.ProcessFeatureChange(name, enable);
+        public void FeatureControlChange(string name, bool enable) {
+            Autopilot.i.ProcessFeatureChange(name, enable);
         }
         
         public object RequestAnnunciatorStatus() {
             return new {
-                ap_main = Autopilot.status switch {
+                ap_main = Autopilot.i.status switch {
                     EAutopilotMasterState.ON => EAnnunciatorState.AMBER,
                     EAutopilotMasterState.FULL => EAnnunciatorState.GREEN,
                     _ => EAnnunciatorState.OFF
                 },
-                ap_arm = Autopilot.armState switch {
+                ap_arm = Autopilot.i.armState switch {
                     EAutopilotArmState.NOT_ARMED => EAnnunciatorState.OFF,
                     EAutopilotArmState.ARMED => EAnnunciatorState.GREEN,
                     _ => EAnnunciatorState.AMBER
                 },
-                ap_warn = Autopilot.status == EAutopilotMasterState.DISENGAGE_WARN,
-                opmode_switch = Autopilot.config.features.autoSwitch ? Autopilot.isHumanInput ? EAnnunciatorState.GREEN : EAnnunciatorState.AMBER : EAnnunciatorState.OFF,
-                acc = Autopilot.status == EAutopilotMasterState.FULL ? EAnnunciatorState.GREEN : EAnnunciatorState.OFF,
-                mnav_desync = Autopilot.mnavDesyncWarn,
+                ap_warn = Autopilot.i.status == EAutopilotMasterState.DISENGAGE_WARN,
+                opmode_switch = Autopilot.i.config.features.autoSwitch ? Autopilot.i.isHumanInput ? EAnnunciatorState.GREEN : EAnnunciatorState.AMBER : EAnnunciatorState.OFF,
+                acc = Autopilot.i.status == EAutopilotMasterState.FULL ? EAnnunciatorState.GREEN : EAnnunciatorState.OFF,
+                mnav_desync = Autopilot.i.mnavDesyncWarn,
+                hnav_fault = Autopilot.i.hnavFaultWarn,
+                nav_mode = Autopilot.i.status == EAutopilotMasterState.FULL ? Autopilot.i.pathingMode : 0,
+                mnav_queue = Autopilot.i.status == EAutopilotMasterState.FULL ? Autopilot.i.mouseMoveQueueFinished ? EAnnunciatorState.GREEN : EAnnunciatorState.AMBER : EAnnunciatorState.OFF,
             };
         }
 
         public void SuppressAnnunciator(string type) {
             switch (type) {
                 case "mnav-desync":
-                    Autopilot.mnavDesyncWarn = false;
+                    Autopilot.i.mnavDesyncWarn = false;
+                    break;
+                case "hnav-fault":
+                    Autopilot.i.hnavFaultWarn = false;
                     break;
             }
         }
@@ -76,16 +82,55 @@ namespace Autosu.Pages.Bot {
         }
 
         public object GetNextObject() {
-            if (Autopilot.status < EAutopilotMasterState.ON) return null;
+            if (Autopilot.i.status < EAutopilotMasterState.ON) return null;
             return new {
-                time = Autopilot.mnavTarget.time - Autopilot.time,
-                x = APUtil.OsuPixelToScreen(Autopilot.mnavTarget.pos).X,
-                y = APUtil.OsuPixelToScreen(Autopilot.mnavTarget.pos).Y,
+                time = Autopilot.i.navTarget.time - Autopilot.i.time,
+                extraData = Autopilot.i.abortCount,
+                x = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).X,
+                y = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).Y,
                 xc = Cursor.Position.X,
                 yc = Cursor.Position.Y,
-                queueLength = Autopilot.mouseMoveQueue.Count,
-                sysLatency = Autopilot.sysLatency,
+                queueLength = Autopilot.i.mouseMoveQueue.Count,
+                sysLatency = Autopilot.i.sysLatency,
             };
+        }
+
+        public string RequestTogglebtnStatus() {
+            return JsonConvert.SerializeObject(new {
+                features = Autopilot.i.config.features,
+                cmdEnable = Autopilot.i.status > EAutopilotMasterState.DISENGAGE_WARN
+            });
+        }
+
+        public object ReadProfile(string name) {
+            bool suc = false;
+            string msg = "";
+            APConfig cfg = APConfig.Load(name.ToLower());
+
+            if (Autopilot.i.status > EAutopilotMasterState.ARM) msg = "A/P LOCK";
+            else if (cfg == null) msg = "NOT FOUND";
+
+            else {
+                Autopilot.i.config = cfg;
+                suc = true;
+            }
+
+            return new {
+                ok = suc,
+                msg
+            };
+        }
+
+        public object WriteProfile(string name) {
+            string msg = "OK";
+            name = name.ToLower();            
+            string path = CommonUtil.ParsePath($@"userdata/profiles/{name.ToLower()}.aosu");
+
+            if (File.Exists(path)) msg = "OK OVERWRITE";
+            Autopilot.i.config.name = name;
+            Autopilot.i.config.Save();
+
+            return msg;
         }
 
         public void ReturnToMenu() {

@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Autosu.classes.autopilot {
     [Serializable]
     public class APConfig {
-        public string name;
+        public string name = "default";
         public APFeatureControl features;
         public APValueInput inputs;
 
@@ -51,6 +51,7 @@ namespace Autosu.classes.autopilot {
         public bool spinnerRandom = true;
         public bool humanEndurance = true;
         public bool humanNervous = true;
+        public bool humanDistraction = true;
         public bool autoSwitch = false;
         public bool takeoverStandby = true;
         public bool panic = false;

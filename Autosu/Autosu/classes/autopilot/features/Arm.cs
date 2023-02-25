@@ -15,10 +15,10 @@ using WMPLib;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
-        public static EAutopilotArmState armState { get; private set; }
-        private static WindowsMediaPlayer testPlayer;
+        public EAutopilotArmState armState { get; private set; }
+        private WindowsMediaPlayer testPlayer;
 
-        public static void Arm() {
+        public void Arm() {
             if (armState == EAutopilotArmState.START_LISTEN) {
                 Vector2 pos = MouseUtil.RelativeMousePosition(new Vector2(Cursor.Position.X, Cursor.Position.Y));
                 if (!(pos.X > 0.80f && pos.Y > 0.80f)) return;
@@ -32,7 +32,7 @@ namespace Autosu.classes.autopilot {
 
         }
 
-        private static void ArmUpdate() {
+        private void ArmUpdate() {
 
         }
     }

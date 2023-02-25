@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -38,6 +40,8 @@ namespace Autosu.Utils {
         }
 
         public static Vector2[] GetLinearPath(Vector2 currentPos, Vector2 targetPos, int durationMs, int stepMs) {
+            stepMs = Math.Max(stepMs, 1);
+
             List<Vector2> positions = new List<Vector2>();
 
             // Calculate the distance to move in each axis
@@ -71,6 +75,9 @@ namespace Autosu.Utils {
                 currentPosition = nextPosition;
             }
 
+
+            //Debug.WriteLine($"Path: {currentPos} -> {targetPos} under {durationMs}ms with {stepMs} move time. {positions.Count} nodes");
+
             // Convert the list to an array and return it
             return positions.ToArray();
 
@@ -78,6 +85,7 @@ namespace Autosu.Utils {
 
 
         public static bool SetCursor(Point position) {
+            if (position.X <= 1 && position.Y <= 1) return false;
             Cursor.Position = new(position.X, position.Y);
 
             return true;

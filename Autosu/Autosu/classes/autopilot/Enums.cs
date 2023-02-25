@@ -26,4 +26,10 @@ namespace Autosu.classes.autopilot {
         GREEN
     }
 
+    public enum EPathingControlMode {
+        NONE,
+        MOUSE,
+        KEYBOARD
+    }
+
 }

@@ -17,24 +17,27 @@ using CefSharp;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
-        public static Beatmap beatmap;
-        public static APConfig config = new();
+        public static Autopilot i = new();
+
+        public Beatmap beatmap;
+        public APConfig config = new();
 
         #region Fields - Threading and Timing related
-        private static Stopwatch playhead = new();
-        public static int time => (int) playhead.ElapsedMilliseconds;
-        private static Thread thread;
-        private static readonly Stopwatch cycleTimer = new();
-        private static System.Threading.Timer threadTimer;
-        private static long nextUpdateTime;
-        private static bool keepGoing = true;
-        private static HighAccuracyTimer highAccuracyTimer = new(NavMouseUpdate, 1);
-        public static Stopwatch sysLatencyTimer = new();
-        public static int sysLatency { get; private set; }
+        private Stopwatch playhead = new();
+        public int time => (int) playhead.ElapsedMilliseconds + n1Offset;
+        private Thread thread;
+        private readonly Stopwatch cycleTimer = new();
+        private System.Threading.Timer threadTimer;
+        private long nextUpdateTime;
+        private bool keepGoing = true;
+        private HighAccuracyTimer highAccuracyTimer;
+        public Stopwatch sysLatencyTimer = new();
+        public int sysLatency { get; private set; }
         #endregion
 
         #region Fields - Status Related
-        public static EAutopilotMasterState status { get; private set; }
+        public EAutopilotMasterState status { get; private set; }
+        public HitObject firstNote;
         #endregion
 
         #region Fields - Misc
@@ -45,9 +48,8 @@ namespace Autosu.classes.autopilot {
         static extern int GetUserObjectInformation(IntPtr hObj, int nIndex, IntPtr pvInfo, int nLength, out int lpnLengthNeeded);
         #endregion
 
-        public static void Init(Beatmap beatmap) {
-            Autopilot.beatmap = beatmap;
-            keepGoing = true;
+        public Autopilot() {
+            highAccuracyTimer = new(NavMouseUpdate, 1);
 
             // start the main cycle
             thread = new Thread(new ThreadStart(() => {
@@ -72,21 +74,25 @@ namespace Autosu.classes.autopilot {
             cycleTimer.Start();
             thread.Start();
 
-            /*globalKeyHook.OnKeyDown += (object sender, GlobalKeyEventArgs e) => {
-                MessageBox.Show("press");
-            };*/
+        }
+
+        public void Init(Beatmap beatmap) {
+            this.beatmap = beatmap;
+            keepGoing = true;
+
+            firstNote = beatmap.objects.ToArray()[0];
 
         }
 
         // Main autopilot cycle
         // Time: 1ms
-        public static void Update() {
+        public void Update() {
             if (AutopilotPage.instance == null) return;
 
             // sys latency
-            sysLatencyTimer.Stop();
+            /*sysLatencyTimer.Stop();
             sysLatency = (int)sysLatencyTimer.ElapsedMilliseconds;
-            sysLatencyTimer.Restart();
+            sysLatencyTimer.Restart();*/
 
             switch (status) {
                 case EAutopilotMasterState.ON:
@@ -96,7 +102,7 @@ namespace Autosu.classes.autopilot {
 
             // nav update
             if (status >= EAutopilotMasterState.ON) {
-                MnavUpdate();
+                NavUpdate();
             }
 
             // check for game start
@@ -122,11 +128,11 @@ namespace Autosu.classes.autopilot {
         }
 
 
-        public static void Disengage(bool silent = false) {
+        public void Disengage(bool silent = false) {
 
         }
 
-        public static void Dispose() {
+        public void Dispose() {
             highAccuracyTimer.Stop();
             keepGoing = false;
             threadTimer.Dispose();

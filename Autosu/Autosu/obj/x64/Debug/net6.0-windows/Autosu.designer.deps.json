@@ -412,6 +412,14 @@
           }
         }
       },
+      "InputSimulator/1.0.4": {
+        "runtime": {
+          "lib/net20/WindowsInput.dll": {
+            "assemblyVersion": "1.0.4.0",
+            "fileVersion": "1.0.4.0"
+          }
+        }
+      },
       "Newtonsoft.Json/13.0.2": {
         "runtime": {
           "lib/net6.0/Newtonsoft.Json.dll": {
@@ -506,6 +514,13 @@
       "sha512": "sha512-bFmNnR7h5i4Rz6twBZdHLigiP3pFei5Jf4DNuwkNTHBSUTRBkkkVfZrVlv60L/6qOX/9YgbHIYy6CO8IM8v6rA==",
       "path": "indieteur.globalhooks/1.0.0",
       "hashPath": "indieteur.globalhooks.1.0.0.nupkg.sha512"
+    },
+    "InputSimulator/1.0.4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D0LvRCPQMX6/FJHBjng+RO+wRDuHTJrfo7IAc7rmkPvRqchdVGJWg3y70peOtDy3OLNK+HSOwVkH4GiuLnkKgA==",
+      "path": "inputsimulator/1.0.4",
+      "hashPath": "inputsimulator.1.0.4.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.2": {
       "type": "package",
