@@ -27,10 +27,11 @@ namespace Autosu.classes.autopilot {
                 testPlayer.controls.play();*/
 
                 status = config.features.n1 ? EAutopilotMasterState.ON : EAutopilotMasterState.FULL;
-                if (AutopilotPage.instance.visible) AutopilotPage.instance.visible = true;
-                AutopilotPage.instance.SetOverlay(true, false);
-                playhead.Start();
-
+                AutopilotPage.instance.SetOverlay(true, config.features.n1);
+                if (!config.features.n1) {
+                    if (AutopilotPage.instance.visible) AutopilotPage.instance.visible = true;
+                    playhead.Start();
+                }
                 /*Vector2[] path = MouseUtil.GetLinearPath(new(Cursor.Position.X, Cursor.Position.Y), APUtil.OsuPixelToScreen(navTarget.pos), new Random().Next(200, 500));
                 foreach (var pos in path) pointsQueue.Add(pos);*/
 

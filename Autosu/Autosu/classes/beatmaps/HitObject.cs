@@ -1,6 +1,8 @@
 ﻿using Autosu.Enums;
+using Autosu.Utils;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -21,6 +23,17 @@ namespace Autosu.Classes {
         public ESliderCurveType curveType;
         public List<Vector2> points = new();
         public int repeats;
+        public float length;
+
+        public Vector2[] actualPoints {
+            get {
+                List<Vector2> ret = new();
+                foreach (var item in points) {
+                    ret.Add(APUtil.OsuPixelToScreen(item));
+                }
+                return ret.ToArray();
+            }
+        }
 
         // parse the slider curve
         // P|270:245|307:271
@@ -45,12 +58,36 @@ namespace Autosu.Classes {
 
         }
 
+        public float GetDuration(Beatmap beatmap) {
+            /// length / (SliderMultiplier * 100 * SV) * beatLength
+            /// SliderMultipler comes from song difficulty
+            /// 
+
+            float sm = beatmap.sliderMultiplier;
+            TimingSection timingSection = beatmap.GetTimingSection(time);
+            float beatLength = timingSection.beatLength;
+            float sv = timingSection.sliderSpeed;
+
+            //Debug.WriteLine($"TimingPoint {timingSection.time}: SliderMultiplier={sm} BeatLength={beatLength} SV={sv}");
+
+            return (length / (sm * 100f * sv) * beatLength);
+
+        }
+
     }
 
     [Serializable]
     public class SpinnerObject : HitObject {
         public int endTime;
 
+    }
+
+    [Serializable]
+    public class TimingSection {
+        public int time;
+        public float sliderSpeed;
+        public float beatLength;
+        public bool inherited;
     }
 
 }

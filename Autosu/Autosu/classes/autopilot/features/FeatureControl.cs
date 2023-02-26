@@ -10,7 +10,7 @@ namespace Autosu.classes.autopilot {
             switch (name) {
                 // main cmd
                 case "cmd":
-                    if (enable) return;
+                    if (enable || status == EAutopilotMasterState.DISENGAGE_WARN) return;
                     if (status == EAutopilotMasterState.OFF && armState == EAutopilotArmState.NOT_ARMED) {
                         status = EAutopilotMasterState.ARM;
                         armState = EAutopilotArmState.START_LISTEN;
@@ -22,6 +22,11 @@ namespace Autosu.classes.autopilot {
                 case "n1":
                     if (status <= EAutopilotMasterState.ARM) config.features.n1 = !config.features.n1;
                     break;
+
+                case "mnav": config.features.mnav = !config.features.mnav; break;
+                case "hnav": config.features.hnav = !config.features.hnav; break;
+                case "targetoffset": config.features.targetOffset = !config.features.targetOffset; break;
+
 
             }
         }

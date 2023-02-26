@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Diagnostics;
 
 namespace Autosu.classes {
     [Serializable]
@@ -24,13 +25,22 @@ namespace Autosu.classes {
                 if (_beatmapsCache != null) return _beatmapsCache;
 
                 List<Beatmap> ret = new();
-                try {
-                    foreach (var path in Directory.GetFiles(beatmapPath, "*.osu", SearchOption.AllDirectories)) {
+                foreach (var path in Directory.GetFiles(beatmapPath, "*.osu", SearchOption.AllDirectories)) {
+                    try {
                         Beatmap bm = new Beatmap(path);
                         if (bm.mode == EBeatmapMode.STD) ret.Add(bm);
+                    } catch (Exception e) {
+                        // Get stack trace for the exception with source file information
+                        var st = new StackTrace(e, true);
+                        // Get the top stack frame
+                        var frame = st.GetFrame(0);
+                        // Get the line number from the stack frame
+                        var line = frame.GetFileLineNumber();
+                        Debug.WriteLine($"Failed to load {path}: {e.Message}: {e.TargetSite}: line {line}");
                     }
-                    _beatmapsCache = ret;
-                } catch { }
+                }
+                _beatmapsCache = ret;
+                
 
                 return ret;
             }

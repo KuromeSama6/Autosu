@@ -187,3 +187,7 @@ input[type=number] {
         background-color: #ff9d3922;
     }
 }
+
+.inputs-box {
+    font-family: monospace;
+}

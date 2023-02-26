@@ -14,6 +14,7 @@ using Indieteur.GlobalHooks;
 using System.Runtime.InteropServices;
 using System.Numerics;
 using CefSharp;
+using System.Media;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
@@ -24,7 +25,7 @@ namespace Autosu.classes.autopilot {
 
         #region Fields - Threading and Timing related
         private Stopwatch playhead = new();
-        public int time => (int) playhead.ElapsedMilliseconds + n1Offset;
+        public int time => (int) playhead.ElapsedMilliseconds + n1Offset + calibOffset;
         private Thread thread;
         private readonly Stopwatch cycleTimer = new();
         private System.Threading.Timer threadTimer;
@@ -33,10 +34,11 @@ namespace Autosu.classes.autopilot {
         private HighAccuracyTimer highAccuracyTimer;
         public Stopwatch sysLatencyTimer = new();
         public int sysLatency { get; private set; }
+        public SoundPlayer apDisconnectPlayer = new (CommonUtil.ParsePath("resources/audio/ap_disconnect.wav"));
         #endregion
 
         #region Fields - Status Related
-        public EAutopilotMasterState status { get; private set; }
+        public EAutopilotMasterState status;
         public HitObject firstNote;
         #endregion
 
@@ -129,13 +131,40 @@ namespace Autosu.classes.autopilot {
 
 
         public void Disengage(bool silent = false) {
+            apDisconnectPlayer.Stop();
+            status = EAutopilotMasterState.OFF;
+            Dispose();
+
+            // reset autopilot instance
+            i = new();
+            i.Init(Beatmap.GetOne(beatmap.title, beatmap.variation));
+            i.config = config;
+
+            // sync warnings
+            i.hnavFaultWarn = hnavFaultWarn;
+            i.mnavDesyncWarn = mnavDesyncWarn;
+
+            AutopilotPage.instance.Invoke(() => AutopilotPage.instance.SetOverlay(true, true));
+
+
+            if (!silent) {
+                i.status = EAutopilotMasterState.DISENGAGE_WARN;
+                apDisconnectPlayer.PlayLooping();
+            } else {
+                AutopilotPage.instance.visible = true;
+            }
 
         }
 
         public void Dispose() {
             highAccuracyTimer.Stop();
             keepGoing = false;
+            cycleTimer.Stop();
+            playhead.Stop();
+            highAccuracyTimer.Stop();
+            sysLatencyTimer.Stop();
             threadTimer.Dispose();
+            apDisconnectPlayer.Dispose();
             thread.Join();
         }
     }

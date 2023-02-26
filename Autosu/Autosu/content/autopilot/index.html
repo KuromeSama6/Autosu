@@ -267,7 +267,7 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 
 			</div>
 
-			<div class="col-6 individual-box">
+			<div class="col-6 individual-box inputs-box">
 				<div class="d-flex flex-row">
 					<div class="input-box">
 						<small style="display:inline-block">PROFILE SAVE</small><br>
@@ -284,6 +284,14 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					<div class="input-box">
 						<small style="display:inline-block">MNAV DLY MS REF</small><br>
 						<input type="number" id="!movedelay-sel" style="width: 2.5em;" class="boeing-input" min="0" max="9999" value="0005" data-digits="4"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">TIME OFFSET</small><br>
+						<input type="text" id="!cal-offset" style="width: 2.5em;" class="boeing-input" min="0" max="9999" value="0000" data-digits="4"><br>
+					</div>
+					<div class="input-box">
+						<small style="display:inline-block">TARGET LOC DIST THRESH</small><br>
+						<input type="number" id="!targetloc-thresh" style="width: 2.5em;" class="boeing-input" min="0" max="1000" value="0090" data-digits="4"><br>
 					</div>
 				</div>
 				<div class="d-flex flex-row">
@@ -311,9 +319,10 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 				<h6>Keys</h6>
 				<ul>
 					<li>HOME - Toggle Overlay</li>
-					<li>PAGEUP - First Note Calibration</li>
-					<li>CTRL+END - Same as pressing <code>DISENGAGE</code></li>
-					<li>Press <code>DISENGAGE</code> to exit</li>
+					<li>C - First Note Calibration</li>
+					<li>CONTROL + L/R ARROW - Realtime Calibration</li>
+					<li>END - Same as pressing <code>DISENGAGE</code></li>
+					<li>Press <code>DISENGAGE</code> to exit autopilot command, or to return to menu.</li>
 				</ul>
 				<h6>Operation</h6>
 				<ol>
@@ -334,4 +343,5 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 <script src="../common/js/common.js"></script>
 <script src="main.js"></script>
 <script src="buttons.js"></script>
+<script src="input.js"></script>
 </html>

@@ -70,6 +70,7 @@ namespace Autosu.Pages.SongSelect {
         public void StartAutopilot(string title, string variation) {
             // initialize autopilot
             Beatmap bm = Beatmap.GetOne(title, variation);
+            Autopilot.i = new();
             Autopilot.i.Init(bm);
 
             if (currentPreviewAudio != null) currentPreviewAudio.close();

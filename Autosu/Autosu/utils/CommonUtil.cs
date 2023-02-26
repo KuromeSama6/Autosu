@@ -38,6 +38,21 @@ namespace Autosu.Utils {
             return browser.EvaluateScriptAsync($"{name}(JSON.parse('{JsonConvert.SerializeObject(param)}'))");
         }
 
+        public static float RandomFloatRange(float min, float max) {
+            System.Random random = new System.Random();
+            double val = (random.NextDouble() * (max - min) + min);
+            return (float) val;
+        }
+
+        public static float Normalize(float value, float min, float max) {
+            value = Math.Clamp(value, min, max);
+            if (min == max) {
+                // Avoid division by zero
+                return 0f;
+            } else {
+                return (value - min) / (max - min);
+            }
+        }
         public static List<string> ExtractStringSection(string input, string sectionName) {
             // Split the input into lines
             string[] lines = input.Split(new string[] { Environment.NewLine }, StringSplitOptions.None);

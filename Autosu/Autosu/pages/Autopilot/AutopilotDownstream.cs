@@ -13,6 +13,7 @@ using WMPLib;
 using Autosu.classes.autopilot;
 using System.Xml.Linq;
 using System.Numerics;
+using System.Diagnostics;
 
 namespace Autosu.Pages.Bot {
     public class AutopilotDownsream : Downstream {
@@ -39,7 +40,16 @@ namespace Autosu.Pages.Bot {
         public void FeatureControlChange(string name, bool enable) {
             Autopilot.i.ProcessFeatureChange(name, enable);
         }
-        
+
+        public void InputChange(string name, int value) {
+            //Debug.WriteLine($"{name}, {value}");
+            switch (name) {
+                case "targetloc-offset": Autopilot.i.config.inputs.targetOffsetAmount = value; break;
+                case "targetloc-thresh": Autopilot.i.config.inputs.targetOffsetThreshold = value; break;
+            }
+        }
+
+
         public object RequestAnnunciatorStatus() {
             return new {
                 ap_main = Autopilot.i.status switch {
@@ -70,6 +80,14 @@ namespace Autosu.Pages.Bot {
                 case "hnav-fault":
                     Autopilot.i.hnavFaultWarn = false;
                     break;
+                case "ap-warn":
+                    if (Autopilot.i.status != EAutopilotMasterState.DISENGAGE_WARN) return;
+
+                    if (Autopilot.i.apDisconnectPlayer != null) {
+                        Autopilot.i.apDisconnectPlayer.Stop();
+                        Autopilot.i.status = EAutopilotMasterState.OFF;
+                    }
+                    break;
             }
         }
 
@@ -85,7 +103,9 @@ namespace Autosu.Pages.Bot {
             if (Autopilot.i.status < EAutopilotMasterState.ON) return null;
             return new {
                 time = Autopilot.i.navTarget.time - Autopilot.i.time,
-                extraData = Autopilot.i.abortCount,
+                //extraData = Autopilot.i.abortCount,
+                extraData = Autopilot.i.navTarget is SliderObject ? $"{Autopilot.i.navTarget.time} {((SliderObject) Autopilot.i.navTarget).type}" : Autopilot.i.abortCount.ToString(),
+                //extraData = Autopilot.i.sysLatency,
                 x = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).X,
                 y = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).Y,
                 xc = Cursor.Position.X,
@@ -99,6 +119,14 @@ namespace Autosu.Pages.Bot {
             return JsonConvert.SerializeObject(new {
                 features = Autopilot.i.config.features,
                 cmdEnable = Autopilot.i.status > EAutopilotMasterState.DISENGAGE_WARN
+            });
+        }
+
+        public string RequestInputValues() {
+            return JsonConvert.SerializeObject(new {
+                inputs = Autopilot.i.config.inputs,
+                calib = -Autopilot.i.calibOffset,
+                enableCalib = Autopilot.i.status == EAutopilotMasterState.FULL
             });
         }
 
@@ -134,7 +162,8 @@ namespace Autosu.Pages.Bot {
         }
 
         public void ReturnToMenu() {
-            form.ReturnToMenu();
+            if (Autopilot.i.status > EAutopilotMasterState.OFF) Autopilot.i.Disengage();
+            else form.ReturnToMenu();
         }
 
     }

@@ -19,7 +19,4 @@
     <Import Project="$(NuGetPackageRoot)cef.redist.x64\110.0.25\buildTransitive\cef.redist.x64.props" Condition="Exists('$(NuGetPackageRoot)cef.redist.x64\110.0.25\buildTransitive\cef.redist.x64.props')" />
     <Import Project="$(NuGetPackageRoot)cefsharp.common\110.0.250\buildTransitive\CefSharp.Common.props" Condition="Exists('$(NuGetPackageRoot)cefsharp.common\110.0.250\buildTransitive\CefSharp.Common.props')" />
   </ImportGroup>
-  <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgEasyHook Condition=" '$(PkgEasyHook)' == '' ">C:\Users\1chan\.nuget\packages\easyhook\2.7.7097</PkgEasyHook>
-  </PropertyGroup>
 </Project>

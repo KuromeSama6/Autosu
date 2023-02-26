@@ -34,6 +34,18 @@ namespace Autosu.Utils {
             return new Vector2(actualX, actualY);
         }
 
+        public static float OsuPixelDistance(float dist) {
+            // Get the screen size in pixels
+            int screen_width = Screen.PrimaryScreen.Bounds.Width;
+            int screen_height = Screen.PrimaryScreen.Bounds.Height;
+
+            // Calculate the conversion factor based on the current screen resolution
+            float conversion_factor = (screen_width / 640f + screen_height / 480f) / 2f;
+
+            // Convert the distance from osu!pixels to pixels
+            return dist * conversion_factor;
+        }
+
         public static void PlayAnnunciatorAlert() {
             var audio = new WindowsMediaPlayer();
             audio.URL = CommonUtil.ParsePath("resources/audio/alert.wav");
@@ -45,6 +57,22 @@ namespace Autosu.Utils {
                 player.Play();
             }
 
+        }
+
+
+        public static Vector2 OffsetLocation(Vector2 loc, float distance) {
+            Tuple<float, float> location = new(loc.X, loc.Y);
+            // Generate a random angle using the built-in Random class
+            double randomAngle = new Random().NextDouble() * Math.PI * 2;
+
+            // Calculate the new location by adding the offset to the original location
+            float offsetX = (float) Math.Cos(randomAngle) * distance;
+            float offsetY = (float) Math.Sin(randomAngle) * distance;
+
+            float newX = location.Item1 + offsetX;
+            float newY = location.Item2 + offsetY;
+
+            return new(newX, newY);
         }
 
     }

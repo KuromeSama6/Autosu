@@ -58,14 +58,18 @@ namespace Autosu {
 
         private void MainKeyboardDown(object sender, GlobalKeyEventArgs e) {
             if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.End) Environment.Exit(0);
-            if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryCalib();
+            
+            // regular
+            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.RightArrow) Autopilot.i.TryRegularCalib(true);
+            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.LeftArrow) Autopilot.i.TryRegularCalib(false);
+
+            if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryN1Calib();
 
             if (AutopilotPage.instance != null) {
                 switch (e.KeyCode) {
                     case VirtualKeycodes.Home: AutopilotPage.instance.visible = !AutopilotPage.instance.visible; break;
                     case VirtualKeycodes.End:
-                        AutopilotPage.instance.ReturnToMenu();;
-                        if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftCtrl) && AutopilotPage.instance != null) AutopilotPage.instance.ReturnToMenu();
+                        if (Autopilot.i.status > EAutopilotMasterState.OFF) Autopilot.i.Disengage(!(Autopilot.i.status > EAutopilotMasterState.ARM));
                         break;
                 }
             }

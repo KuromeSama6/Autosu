@@ -276,3 +276,5 @@ D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\resources\audio\alert.w
 D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\Indieteur.GlobalHooks.dll
 D:\dev\Autosu\Autosu\Autosu\obj\x64\Debug\net6.0-windows\Autosu.DebugOverlay.resources
 D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\WindowsInput.dll
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\resources\audio\ap_disconnect.wav
+D:\dev\Autosu\Autosu\Autosu\bin\x64\Debug\net6.0-windows\content\autopilot\input.js
