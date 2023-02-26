@@ -35,11 +35,26 @@ namespace Autosu.Classes {
         public List<HitObject> objects = new();
         public float circleSize;
         public float sliderMultiplier;
+        public float approachRate;
         public List<TimingSection> timings = new();
 
         #endregion
 
         public float realCircleRadius => APUtil.OsuPixelDistance(54.5f - 4.48f * circleSize);
+
+        /// <summary>
+        /// The length of the period prior to judgement, that the note is visible.
+        /// <br>When implementing, take this into account, and only navigate to notes that are visible.</br>
+        /// <br></br>
+        /// <br>https://osu.ppy.sh/wiki/en/Beatmap/Approach_rate</br>
+        /// </summary>
+        public int visualPeriod {
+            get {
+                if (approachRate == 5) return 1200;
+                else if (approachRate < 5) return 1200 + (int)(600f * (5f - approachRate) / 5f);
+                else return 1200 - (int)(750f * (approachRate - 5f) / 5f);
+            }
+        }
 
         public static Beatmap GetOne(string title, string variation) {
             Beatmap? ret = null;
@@ -80,6 +95,7 @@ namespace Autosu.Classes {
 
             overallDifficulty = (int) (float.Parse(difficulty["OverallDifficulty"]) * 10);
             circleSize = float.Parse(difficulty["CircleSize"]);
+            approachRate = float.Parse(difficulty["ApproachRate"]);
             sliderMultiplier = float.Parse(difficulty["SliderMultiplier"]);
 
             title = metadata["Title"];

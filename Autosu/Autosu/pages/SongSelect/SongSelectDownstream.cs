@@ -28,6 +28,14 @@ namespace Autosu.Pages.SongSelect {
         public override void BrowserReady() {
             string path = Config.instance.osuPath;
             if (Directory.Exists(path)) browser.ExecuteScriptAsync($"selectFiles(`{JsonConvert.SerializeObject(Config.instance.songData)}`, true)");
+            if (Directory.Exists(path)) browser.ExecuteScriptAsync($"notifyFailedFiles(`{JsonConvert.SerializeObject(Config.instance.failedPaths)}`)");
+        }
+
+        public void ReloadAllSongs() {
+            Config.instance.FlushBeatmapCache();
+            string path = Config.instance.osuPath;
+            if (Directory.Exists(path)) browser.ExecuteScriptAsync($"selectFiles(`{JsonConvert.SerializeObject(Config.instance.songData)}`, true)");
+            if (Directory.Exists(path)) browser.ExecuteScriptAsync($"notifyFailedFiles(`{JsonConvert.SerializeObject(Config.instance.failedPaths)}`)");
         }
 
         public object SelectBeatmapDirectory(string path) {
@@ -37,6 +45,9 @@ namespace Autosu.Pages.SongSelect {
             // write to cfg
             Config.instance.osuPath = path;
             SerializationUtil.Save(CommonUtil.ParsePath("userdata/config.aosu"), Config.instance);
+            CommonUtil.DelayedCall(() => {
+                browser.ExecuteScriptAsync($"notifyFailedFiles(`{JsonConvert.SerializeObject(Config.instance.failedPaths)}`)");
+            }, 0.2f);
             return JsonConvert.SerializeObject(Config.instance.songData);
 
         }
@@ -75,6 +86,7 @@ namespace Autosu.Pages.SongSelect {
 
             if (currentPreviewAudio != null) currentPreviewAudio.close();
             currentPreviewAudio.close();
+            AutopilotPage.gameHasLaunched = false;
             form.SwitchPage<AutopilotPage>();
         }
 

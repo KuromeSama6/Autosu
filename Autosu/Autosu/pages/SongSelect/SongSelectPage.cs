@@ -15,6 +15,8 @@ using System.Linq;
 using Autosu.utils;
 using WindowsInput;
 using WindowsInput.Native;
+using System.Diagnostics;
+using System.Numerics;
 
 namespace Autosu {
     public partial class SongSelectPage : Form {
@@ -54,6 +56,8 @@ namespace Autosu {
             //WindowState = FormWindowState.Maximized;
             globalKeyHook.OnKeyDown += MainKeyboardDown;
             globalMouseHook.OnButtonDown += MainMouseDown;
+            Vector2 startPos = new(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
+            this.Icon = new Icon(CommonUtil.ParsePath("resources/common/logo.ico"));
         }
 
         private void MainKeyboardDown(object sender, GlobalKeyEventArgs e) {

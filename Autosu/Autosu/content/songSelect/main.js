@@ -13,13 +13,15 @@ function selectFiles(data){
 }
 
 function renderSongs(filter){
+    $g("@reload-btn").hidden = false;
+
     // get the candidates
     var candidates = [];
     for (let name in currentBeatmaps) {
         if (filter == "" || name.toLocaleLowerCase().includes(filter.toLocaleLowerCase())) candidates.push(name);
     }
 
-    _("message", `Found <b>${Object.keys(currentBeatmaps).length}</b> Titles, Showing <b>${candidates.length}</b> Title(s)${filter == "" ? "" : ` that includes <code>${filter}</code>`}.`);
+    _("message", `Loaded <b>${Object.keys(currentBeatmaps).length}</b> Beatmaps, Showing <b>${candidates.length}</b> Title(s)${filter == "" ? "" : ` that includes <code>${filter}</code>`}.`);
 
     // render the song list
     for (let ele of $g("beatmaps-container").querySelectorAll("a")) if (ele.id != "beatmap-listing-template") ele.remove();
@@ -30,13 +32,39 @@ function renderSongs(filter){
         let children = ele.querySelectorAll("span");
 
         children[0].innerHTML = title;
-        children[1].innerHTML = `<span class="badge bg-primary rounded-pill" style="float:right">${currentBeatmaps[title].length}</span>`;
+        children[1].innerHTML = `${currentBeatmaps[title].length} DIFFICULTIES`;
 
         ele.href = `javascript:renderDifficulties("${title}");`;
 
     }
 
 }
+
+function notifyFailedFiles(files){
+    files = JSON.parse(files.replaceAll("\\", "\\\\"));
+    
+    for (let pth of files){
+        let path = pth.replaceAll("\\\\", "\\");
+        let name = path.split("\\")[path.split("\\").length - 1];
+
+        let ele = Clone($g("beatmaps-container"), $g("beatmap-listing-template"));
+        ele.hidden = false;
+        ele.disabled = true;
+        ele.id = "";
+        ele.classList.remove("list-group-item-action");
+        ele.classList.add("list-group-item-danger");
+        let children = ele.querySelectorAll("span");
+
+        children[0].innerHTML = name;
+        children[1].innerHTML = `LOAD FAIL`;
+        children[1].classList.add("bg-danger");
+        children[1].classList.remove("bg-primary");
+
+    }
+
+}
+
+//upstream.openDev();
 
 function renderDifficulties(title){
     const startBtn = $g("@start-btn");
@@ -88,3 +116,18 @@ $g("!name-filter").addEventListener("keyup", () => {
 $g("@start-btn").addEventListener("click", () => {
     upstream.startAutopilot(selected.title, selected.difficulty);
 })
+
+$g("@reload-btn").addEventListener('click', () => {
+    for (let ele of $g("difficulty-container").querySelectorAll("a")) if (ele.id != "difficulty-listing-template") ele.remove();
+    for (let ele of $g("beatmaps-container").querySelectorAll("a")) if (ele.id != "beatmap-listing-template") ele.remove();
+    _("message", `Loading`);
+    currentBeatmaps = [];
+    selected = {
+        title: "",
+        variation: ""
+    }
+    $g("@start-btn").hidden = true;
+
+    upstream.reloadAllSongs();
+
+});

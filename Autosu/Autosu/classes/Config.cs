@@ -19,11 +19,14 @@ namespace Autosu.classes {
 
         #endregion
 
+        [NonSerialized] public List<string> failedPaths = new();
+
         #region Dynamic Fields
         public List<Beatmap> beatmaps {
             get {
                 if (_beatmapsCache != null) return _beatmapsCache;
 
+                failedPaths = new();
                 List<Beatmap> ret = new();
                 foreach (var path in Directory.GetFiles(beatmapPath, "*.osu", SearchOption.AllDirectories)) {
                     try {
@@ -32,11 +35,11 @@ namespace Autosu.classes {
                     } catch (Exception e) {
                         // Get stack trace for the exception with source file information
                         var st = new StackTrace(e, true);
-                        // Get the top stack frame
-                        var frame = st.GetFrame(0);
-                        // Get the line number from the stack frame
-                        var line = frame.GetFileLineNumber();
-                        Debug.WriteLine($"Failed to load {path}: {e.Message}: {e.TargetSite}: line {line}");
+                        string lineMsg = "";
+
+                        for (int i = 0; i < st.FrameCount; i++) lineMsg += $"{st.GetFrame(i).GetMethod()} @ line {st.GetFrame(i).GetFileLineNumber()}:";
+                        Debug.WriteLine($"Failed to load {path}: {e.Message}: {lineMsg}");
+                        failedPaths.Add(path);
                     }
                 }
                 _beatmapsCache = ret;
@@ -64,6 +67,10 @@ namespace Autosu.classes {
                     path = beatmapPath.Replace("\\", "\\\\")
                 };
             }
+        }
+
+        public void FlushBeatmapCache() {
+            _beatmapsCache = null;
         }
 
     }

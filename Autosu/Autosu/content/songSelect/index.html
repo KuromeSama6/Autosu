@@ -41,9 +41,13 @@
 					<span class="input-group-text">Beatmap Name Includes:</span>
 					<input type="text" class="form-control bg-dark text-light" id="!name-filter">
 				</div>
+				<div>
+					<button type="button" class="btn btn-outline-light reload-button" id="@reload-btn" hidden>Reload All From Song Folder</button>
+				</div>
 			</div>
 		</div>
 	</div>
+
 
 	<div class="container" id="beatmap-listing">
 		<div class="row">
@@ -68,6 +72,15 @@
 			</div>
 		</div>
 		<br>
+		<div class="row individual-box d-flex align-items-center warning-box" style="margin-bottom:1em;">
+			<h2>WARNING</h2>
+			<p>
+				<b>Autosu! is open source.</b> If this copy of Autosu! has been sold to you for a price, you have been tricked.<br>
+				<b>Autosu! is a autoplay bot.</b> Autosu! does not read/write memory and will not modify the game directly.<br>
+				<b>Submitting a score played by Autosu! to Bancho is against osu! rules.</b> This is cheating. Violators' accounts will be restricted.
+			</p>
+		</div>
+
 		<div class="row individual-box d-flex align-items-center" id="confirm-box">
 			<div class="col-2">
 				<img class="preview-thumbnail" src="img-placeholder.png" id="preview-img">

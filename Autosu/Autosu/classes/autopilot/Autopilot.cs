@@ -15,6 +15,7 @@ using System.Runtime.InteropServices;
 using System.Numerics;
 using CefSharp;
 using System.Media;
+using Newtonsoft.Json;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
@@ -32,6 +33,7 @@ namespace Autosu.classes.autopilot {
         private long nextUpdateTime;
         private bool keepGoing = true;
         private HighAccuracyTimer highAccuracyTimer;
+        private HighAccuracyTimer normalCycleTimer;
         public Stopwatch sysLatencyTimer = new();
         public int sysLatency { get; private set; }
         public SoundPlayer apDisconnectPlayer = new (CommonUtil.ParsePath("resources/audio/ap_disconnect.wav"));
@@ -52,6 +54,7 @@ namespace Autosu.classes.autopilot {
 
         public Autopilot() {
             highAccuracyTimer = new(NavMouseUpdate, 1);
+            normalCycleTimer = new(Update, 1);
 
             // start the main cycle
             thread = new Thread(new ThreadStart(() => {
@@ -64,7 +67,7 @@ namespace Autosu.classes.autopilot {
 
                     nextUpdateTime += 1;
 
-                    Update();
+                    //Update();
 
                     while (cycleTimer.ElapsedMilliseconds < nextUpdateTime) {
                         Thread.Sleep(0);
@@ -162,6 +165,7 @@ namespace Autosu.classes.autopilot {
             cycleTimer.Stop();
             playhead.Stop();
             highAccuracyTimer.Stop();
+            normalCycleTimer.Stop();
             sysLatencyTimer.Stop();
             threadTimer.Dispose();
             apDisconnectPlayer.Dispose();

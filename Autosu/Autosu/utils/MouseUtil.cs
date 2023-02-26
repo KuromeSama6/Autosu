@@ -83,153 +83,137 @@ namespace Autosu.Utils {
 
         }
 
-        public static Vector2[] GetLinearPathFake(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs) {
+        public static Vector2[] GetLinearPathSlider(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs) {
             stepMs = Math.Max(stepMs, 1);
             List<Vector2> ret = new();
             ret.Add(currentPos);
 
-            int timeEachLeg = durationMs / positions.Length;
+            // each leg should have a different timing
+            float totalDist = 0f;
+            List<Vector2> totalPoints = new List<Vector2> { currentPos};
+            totalPoints.AddRange(positions);
+            for (int i = 0; i < totalPoints.Count - 1; i++) totalDist += Vector2.Distance(totalPoints[i], totalPoints[i + 1]);
 
             Vector2 startFrom = currentPos;
             foreach (var pos in positions) {
-                ret.AddRange(GetLinearPath(startFrom, pos, timeEachLeg, stepMs));
+                float dist = Vector2.Distance(startFrom, pos);
+                ret.AddRange(GetLinearPath(startFrom, pos, (int)(dist / totalDist * durationMs), stepMs));
                 startFrom = pos;
             }
 
             return ret.ToArray();
         }
 
-        public static Vector2[] GetBezierPath(Vector2 startPoint, Vector2[] controlPoints, int durationMs, int stepMs) {
-            stepMs = Math.Max(stepMs, 1);
+        public static Vector2[] GetBezierPath(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs) {
+            // Calculate the total distance of the path
+            float totalDistance = 0f;
+            for (int i = 0; i < positions.Length - 1; i++) {
+                totalDistance += Vector2.Distance(positions[i], positions[i + 1]);
+            }
 
-            List<Vector2> positions = new List<Vector2>();
+            // Calculate the control points for the Bezier curve
+            Vector2[] controlPoints = new Vector2[positions.Length + 2];
+            controlPoints[0] = currentPos;
+            controlPoints[controlPoints.Length - 1] = positions[positions.Length - 1];
+            for (int i = 0; i < positions.Length; i++) {
+                float t = Vector2.Distance(currentPos, positions[i]) / totalDistance;
+                controlPoints[i + 1] = Vector2.Lerp(currentPos, positions[i], t);
+            }
 
-            // Calculate the number of steps required
+            // Calculate the intermediate points on the Bezier curve
+            List<Vector2> intermediatePoints = new List<Vector2>();
             int numSteps = (int) Math.Ceiling(durationMs / (float) stepMs);
-
-            // Calculate the time interval for each step
-            float interval = 1.0f / numSteps;
-
-            // Loop through each step and calculate the position on the curve
             for (int i = 0; i <= numSteps; i++) {
-                float t = i * interval;
-                Vector2 position = CalculateBezierPoint(t, startPoint, controlPoints);
-                positions.Add(position);
+                float t = i / (float) numSteps;
+                Vector2 point = CalculateBezierPoint(t, controlPoints);
+                intermediatePoints.Add(point);
             }
 
-            // Convert the list to an array and return it
-            return positions.ToArray();
+            return intermediatePoints.ToArray();
         }
 
-        public static Vector2[] GetLinearPathMulti(Vector2 currentPos, Vector2[] path, int durationMs, int stepMs) {
-            stepMs = Math.Max(stepMs, 1);
-            List<Vector2> positions = new List<Vector2>();
 
-            // Add the current position to the list of positions
-            positions.Add(currentPos);
-
-            // Calculate the intermediate positions
-            for (int i = 0; i < path.Length - 1; i++) {
-                Vector2 start = positions[positions.Count - 1];
-                Vector2 end = path[i + 1];
-                float distance = (float) Math.Sqrt((end - start).LengthSquared());
-                int numSteps = (int) Math.Ceiling(durationMs * distance / ((float) stepMs * path.Length));
-
-                float directionX = (end.X - start.X) / distance;
-                float directionY = (end.Y - start.Y) / distance;
-                float stepSize = distance / numSteps;
-
-                for (int j = 0; j < numSteps; j++) {
-                    float nextPosX = start.X + stepSize * directionX;
-                    float nextPosY = start.Y + stepSize * directionY;
-                    Vector2 nextPosition = new Vector2(nextPosX, nextPosY);
-                    positions.Add(nextPosition);
-                    start = nextPosition;
-                }
+        private static Vector2 CalculateBezierPoint(float t, Vector2[] controlPoints) {
+            int n = controlPoints.Length - 1;
+            Vector2 point = Vector2.Zero;
+            for (int i = 0; i <= n; i++) {
+                float b = CalculateBernsteinPolynomial(n, i, t);
+                point += b * controlPoints[i];
             }
-
-            // Add the target position to the list of positions
-            positions.Add(path[path.Length - 1]);
-
-            // Convert the list to an array and return it
-            return positions.ToArray();
+            return point;
         }
 
-        private static Vector2 CalculateBezierPoint(float t, Vector2 startPoint, Vector2[] controlPoints) {
-            // Calculate the number of control points
-            int numControlPoints = controlPoints.Length;
+        private static float CalculateBernsteinPolynomial(int n, int i, float t) {
+            float ti = 1 - t;
+            float a = Factorial(n) / (Factorial(i) * Factorial(n - i));
+            float b = (float) Math.Pow(t, i);
+            float c = (float) Math.Pow(ti, n - i);
+            return a * b * c;
+        }
 
-            // Calculate the order of the curve
-            int order = numControlPoints + 1;
-
-            // Initialize the temporary arrays
-            Vector2[] tempPoints1 = new Vector2[numControlPoints + 1];
-            Vector2[] tempPoints2 = new Vector2[numControlPoints];
-
-            // Copy the control points to the temporary array
-            Array.Copy(controlPoints, tempPoints1, numControlPoints);
-
-            // Loop through each order of the curve and calculate the points
-            for (int i = 1; i < order; i++) {
-                for (int j = 0; j < order - i; j++) {
-                    if (i == 1) {
-                        // Calculate the first order point
-                        tempPoints2[j] = (1 - t) * tempPoints1[j] + t * tempPoints1[j + 1];
-                    } else {
-                        // Calculate the higher order points
-                        tempPoints2[j] = (1 - t) * tempPoints2[j] + t * tempPoints2[j + 1];
-                    }
-                }
+        private static int Factorial(int n) {
+            int result = 1;
+            for (int i = 1; i <= n; i++) {
+                result *= i;
             }
-
-            // Return the final point on the curve
-            return (1 - t) * startPoint + t * tempPoints2[0];
+            return result;
         }
 
-        public static Vector2[] GetCircularPath(Vector2 startPos, Vector2 midPos, Vector2 endPos, int durationMs, int stepMs) {
+        public static Vector2[] GetCircularPath(Vector2 startPos, Vector2 midPoint, Vector2 endPos, int durationMs, int stepMs) {
             stepMs = Math.Max(stepMs, 1);
 
             List<Vector2> positions = new List<Vector2>();
 
-            // Calculate the radius of the circle based on the distance between start and mid points
-            float radius = Vector2.Distance(startPos, midPos);
+            // Calculate the radius and center of the circle that passes through the three points
+            float A = startPos.X - midPoint.X;
+            float B = startPos.Y - midPoint.Y;
+            float C = endPos.X - midPoint.X;
+            float D = endPos.Y - midPoint.Y;
 
-            // Calculate the center of the circle based on the midpoint
-            Vector2 centerPos = midPos;
+            float E = A * (midPoint.X + startPos.X) + B * (midPoint.Y + startPos.Y);
+            float F = C * (midPoint.X + endPos.X) + D * (midPoint.Y + endPos.Y);
 
-            // Calculate the angle between the start and end points
-            float startAngle = (float) Math.Atan2(startPos.Y - centerPos.Y, startPos.X - centerPos.X);
-            float endAngle = (float) Math.Atan2(endPos.Y - centerPos.Y, endPos.X - centerPos.X);
-            float angleDiff = endAngle - startAngle;
-
-            if (angleDiff < 0) {
-                angleDiff += (float) (2 * Math.PI);
+            float G = 2 * (A * (endPos.Y - midPoint.Y) - B * (endPos.X - midPoint.X));
+            if (G == 0) {
+                // Points are collinear, cannot construct a circle
+                return new Vector2[0];
             }
 
-            // Calculate the number of steps required
+            float centerX = (D * E - B * F) / G;
+            float centerY = (A * F - C * E) / G;
+
+            float radius = (float) Math.Sqrt(Math.Pow(midPoint.X - centerX, 2) + Math.Pow(midPoint.Y - centerY, 2));
+
+            // Calculate the angles from the center to the start and end points
+            float startAngle = (float) Math.Atan2(startPos.Y - centerY, startPos.X - centerX);
+            float endAngle = (float) Math.Atan2(endPos.Y - centerY, endPos.X - centerX);
+
+            // Calculate the total angle to sweep and the number of steps required
+            float sweepAngle = endAngle - startAngle;
+            if (sweepAngle < 0) {
+                sweepAngle += (float) (2 * Math.PI);
+            }
+
+            if (sweepAngle > Math.PI) {
+                sweepAngle = -((float) Math.PI * 2 - sweepAngle);
+            }
+
+            //Debug.WriteLine($"swp angle = {sweepAngle * 180f / (float)Math.PI}");
+
             int numSteps = (int) Math.Ceiling(durationMs / (float) stepMs);
+            float stepAngle = sweepAngle / numSteps;
 
-            // Calculate the angle increment for each step
-            float angleIncrement = angleDiff / numSteps;
-
-            // Calculate the initial position on the circle
-            float currentAngle = startAngle;
-            Vector2 currentPosition = new Vector2(
-                centerPos.X + radius * (float) Math.Cos(currentAngle),
-                centerPos.Y + radius * (float) Math.Sin(currentAngle)
-            );
-
-            // Add the initial position to the list of positions
+            // Calculate the positions along the circular path
+            Vector2 currentPosition = startPos;
             positions.Add(currentPosition);
-
-            // Calculate the intermediate positions
             for (int i = 0; i < numSteps; i++) {
+                // Calculate the next angle
+                float nextAngle = startAngle + stepAngle * (i + 1);
+
                 // Calculate the next position
-                currentAngle += angleIncrement;
-                Vector2 nextPosition = new Vector2(
-                    centerPos.X + radius * (float) Math.Cos(currentAngle),
-                    centerPos.Y + radius * (float) Math.Sin(currentAngle)
-                );
+                float nextPosX = centerX + radius * (float) Math.Cos(nextAngle);
+                float nextPosY = centerY + radius * (float) Math.Sin(nextAngle);
+                Vector2 nextPosition = new Vector2(nextPosX, nextPosY);
 
                 // Add the next position to the list of positions
                 positions.Add(nextPosition);
@@ -238,14 +222,17 @@ namespace Autosu.Utils {
                 currentPosition = nextPosition;
             }
 
-            // Add the end position to the list of positions
-            positions.Add(endPos);
+            //Debug.WriteLine($"Circular Path: {startPos} -> {midPoint} -> {endPos} under {durationMs}ms with {stepMs} move time. {positions.Count} nodes");
 
             // Convert the list to an array and return it
             return positions.ToArray();
         }
 
-        public static Vector2[] GetSpinnerPath(Vector2 center, float majorAxis, float minorAxis, float rpm, float duration, float stepMs) {
+        private static float GetAngle(Vector2 vector) {
+            return (float) Math.Atan2(vector.Y, vector.X);
+        }
+
+        public static Vector2[] GetSpinnerPath(Vector2 center, float majorAxis, float minorAxis, float rpm, float duration, float stepMs, float maximumOffset = 0) {
             stepMs = Math.Max(stepMs, 1);
 
             List<Vector2> positions = new List<Vector2>();
@@ -257,9 +244,21 @@ namespace Autosu.Utils {
             float angleStep = 2 * (float) Math.PI * rpm / 60 / (1000 / stepMs);
             float currentAngle = 0;
 
+            Random rand = new Random();
+
             for (int i = 0; i < numSteps; i++) {
-                float x = center.X + majorAxis * (float) Math.Cos(currentAngle);
-                float y = center.Y + minorAxis * (float) Math.Sin(currentAngle);
+                float xOffset = maximumOffset * (float) rand.NextDouble() * 2 - maximumOffset;
+                float yOffset = maximumOffset * (float) rand.NextDouble() * 2 - maximumOffset;
+
+                float majorAxisOffset = maximumOffset * (float) rand.NextDouble() * 2 - maximumOffset;
+                float minorAxisOffset = maximumOffset * (float) rand.NextDouble() * 2 - maximumOffset;
+
+                float majorAxisCurrent = majorAxis + majorAxisOffset;
+                float minorAxisCurrent = minorAxis + minorAxisOffset;
+
+                float x = center.X + majorAxisCurrent * (float) Math.Cos(currentAngle) + xOffset;
+                float y = center.Y + minorAxisCurrent * (float) Math.Sin(currentAngle) + yOffset;
+
                 Vector2 currentPosition = new Vector2(x, y);
                 positions.Add(currentPosition);
 

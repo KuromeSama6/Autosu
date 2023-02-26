@@ -27,6 +27,13 @@ namespace Autosu.classes.autopilot {
                 case "hnav": config.features.hnav = !config.features.hnav; break;
                 case "targetoffset": config.features.targetOffset = !config.features.targetOffset; break;
 
+                case "spinoffset":
+                    config.features.spinnerOffset = !config.features.spinnerOffset;
+                    if (!config.features.spinnerOffset) config.features.spinnerRandom = false;
+                    break;
+
+                case "spinrandom": config.features.spinnerRandom = !config.features.spinnerRandom && config.features.spinnerOffset; break;
+
 
             }
         }

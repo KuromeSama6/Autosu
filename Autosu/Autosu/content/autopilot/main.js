@@ -73,9 +73,8 @@ setInterval(() => {
         _("$test-ident", `Mouse position: [${pos.x}, ${pos.y}]`)
     })
 
-    $g("!hitdelay-sel").disabled = !getEnabled($g("toggle:hnav"));
-    $g("!movedelay-sel").disabled = !getEnabled($g("toggle:mnav"));
-    $g("!movedelay-sel").disabled = !getEnabled($g("toggle:mnav"));
+    $g("!hitdelay-sel").disabled = !(getEnabled($g("toggle:hnav")) && getEnabled($g("toggle:delayhit")) && !getEnabled($g("toggle:accsel")));
+    $g("!movedelay-sel").disabled = !(getEnabled($g("toggle:mnav")) && getEnabled($g("toggle:delaymove")) && !getEnabled($g("toggle:accsel")));
     $g("!minimum-acc").disabled = !getEnabled($g("toggle:accsel"));
     $g("!targetloc-offset").disabled = !getEnabled($g("toggle:targetoffset"));
     $g("!targetloc-thresh").disabled = !getEnabled($g("toggle:targetoffset"));

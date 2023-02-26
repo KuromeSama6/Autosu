@@ -46,6 +46,7 @@ namespace Autosu.Pages.Bot {
             switch (name) {
                 case "targetloc-offset": Autopilot.i.config.inputs.targetOffsetAmount = value; break;
                 case "targetloc-thresh": Autopilot.i.config.inputs.targetOffsetThreshold = value; break;
+                case "spinner-rand": Autopilot.i.config.inputs.spinnerRandomAmount = value; break;
             }
         }
 
@@ -104,8 +105,9 @@ namespace Autosu.Pages.Bot {
             return new {
                 time = Autopilot.i.navTarget.time - Autopilot.i.time,
                 //extraData = Autopilot.i.abortCount,
-                extraData = Autopilot.i.navTarget is SliderObject ? $"{Autopilot.i.navTarget.time} {((SliderObject) Autopilot.i.navTarget).type}" : Autopilot.i.abortCount.ToString(),
-                //extraData = Autopilot.i.sysLatency,
+                //extraData = Autopilot.i.navTarget is SliderObject ? $"{Autopilot.i.navTarget.time} {((SliderObject) Autopilot.i.navTarget).type}" : Autopilot.i.abortCount.ToString(),
+                //extraData = Autopilot.i.navTarget is SpinnerObject ? $"{Autopilot.i.navTarget.time} {((SpinnerObject) Autopilot.i.navTarget).type}" : Autopilot.i.abortCount.ToString(),
+                extraData = Autopilot.i.sysLatency,
                 x = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).X,
                 y = APUtil.OsuPixelToScreen(Autopilot.i.navTarget.pos).Y,
                 xc = Cursor.Position.X,

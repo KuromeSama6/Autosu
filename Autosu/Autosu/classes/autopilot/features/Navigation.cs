@@ -16,6 +16,7 @@ using Microsoft.VisualBasic.Devices;
 using System.Diagnostics;
 using System.Security.Cryptography.X509Certificates;
 using Autosu.Enums;
+using Newtonsoft.Json;
 
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
@@ -102,7 +103,7 @@ namespace Autosu.classes.autopilot {
 
         public void NavUpdate() {
             // mouse
-            const int mnavThreshold = 1000;
+            int mnavThreshold = Math.Min(1000, beatmap.visualPeriod);
             const int hnavThreshold = 0;
 
             if (pathingMode == EPathingControlMode.KEYBOARD && navTarget.time - time < hnavThreshold) {
@@ -115,7 +116,15 @@ namespace Autosu.classes.autopilot {
                         SliderObject slider = (SliderObject) navTarget;
                         extendQueueStarted = true;
                         //Debug.Print($"************SLIDER START: Type: {((SliderObject) navTarget).curveType.ToString()}");
-                        int totalDuration = (int)(slider.GetDuration(beatmap) * slider.repeats);
+                        int totalDuration = (int) (slider.GetDuration(beatmap) * slider.repeats);
+                        if (config.features.hnav && (mouseMoveQueueFinished || status == EAutopilotMasterState.FULL && !abortCatch)) PressSliderKey(totalDuration);
+                        // control is returned when extendMoveQueue clears and unlocks
+
+                    } else if (navTarget is SpinnerObject) {
+                        SpinnerObject spinner = (SpinnerObject) navTarget;
+                        extendQueueStarted = true;
+                        //Debug.Print($"************SLIDER START: Type: {((SliderObject) navTarget).curveType.ToString()}");
+                        int totalDuration = spinner.endTime - spinner.time;
                         if (config.features.hnav && (mouseMoveQueueFinished || status == EAutopilotMasterState.FULL && !abortCatch)) PressSliderKey(totalDuration);
                         // control is returned when extendMoveQueue clears and unlocks
 
@@ -141,7 +150,6 @@ namespace Autosu.classes.autopilot {
             } 
 
             if (pathingMode == EPathingControlMode.MOUSE) {
-                // start movin when time diff is less than 0.7 sec, or if to the next note is less than that
                 if (navTarget.time - time < mnavThreshold) {
                     int timeDiff = navTarget.time - time;
 
@@ -175,7 +183,7 @@ namespace Autosu.classes.autopilot {
                     Vector2[] path = MouseUtil.GetLinearPath(
                         cursorPos, 
                         targetPos, 
-                        Math.Min(navTarget.time - time, 900), 
+                        Math.Min(navTarget.time - time, mnavThreshold), 
                         sysLatency
                     );
 
@@ -190,9 +198,12 @@ namespace Autosu.classes.autopilot {
 
                         // path is for a single slide
                         Vector2[] singlePath = slider.curveType switch {
-                            ESliderCurveType.BEZIER => MouseUtil.GetLinearPathFake(
+                            ESliderCurveType.BEZIER => MouseUtil.GetLinearPathSlider(startPos, slider.actualPoints.ToArray(), duration, sysLatency),
+
+                            ESliderCurveType.PERFECT => MouseUtil.GetCircularPath(
                                 startPos,
-                                slider.actualPoints.ToArray(),
+                                slider.actualPoints[0],
+                                slider.actualPoints[1],
                                 duration,
                                 sysLatency
                             ),
@@ -200,14 +211,6 @@ namespace Autosu.classes.autopilot {
                             _ => MouseUtil.GetLinearPath(
                                 startPos, slider.actualPoints[slider.actualPoints.Length - 1], duration, sysLatency
                             )
-
-                            /*ESliderCurveType.PERFECT => MouseUtil.GetCircularPath(
-                                startPos,
-                                slider.actualPoints[0],
-                                slider.actualPoints[1],
-                                duration,
-                                sysLatency
-                            )*/
                         };
 
                         List<Vector2> finalPath = new();
@@ -223,6 +226,33 @@ namespace Autosu.classes.autopilot {
                         // add the extend queue
                         foreach (var pos in finalPath) extendMoveQueue.Add(pos);
 
+                    }
+
+                    // spinner
+                    if (navTarget is SpinnerObject) {
+                        extendMoveQueue.Clear();
+                        SpinnerObject spinner = (SpinnerObject) navTarget;
+                        int duration = spinner.endTime - spinner.time;
+                        Vector2 startPos = new(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
+
+                        // path is for a single slide
+                        Vector2 axisLength = new Vector2(70, 70);
+                        if (config.features.spinnerOffset) {
+                            axisLength.X = new Random().Next(50, 90);
+                            axisLength.Y = new Random().Next(50, 90);
+                        }
+                        Vector2[] spinPath = MouseUtil.GetSpinnerPath(
+                            startPos,
+                            axisLength.X,
+                            axisLength.Y,
+                            new Random().Next(290, 370),
+                            duration,
+                            sysLatency,
+                            config.features.spinnerRandom ? (float)config.inputs.spinnerRandomAmount / 10f : 0f
+                        );
+
+                        // add the extend queue
+                        foreach (var pos in spinPath) extendMoveQueue.Add(pos);
                     }
 
                     // give control to keyboard

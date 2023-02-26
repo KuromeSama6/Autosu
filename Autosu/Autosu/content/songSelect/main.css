@@ -35,3 +35,14 @@
 .select-button{
     width: 100%;
 }
+
+.reload-button{
+    width: 100%;
+    margin-top: 0.5em;
+}
+
+.warning-box {
+    border-color: #cb0000;
+    background-color: #cb000022;
+    text-align: center;
+}
