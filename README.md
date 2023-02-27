@@ -1,7 +1,9 @@
 # Autosu!
 Osu! autoplay bot, made with CefSharp Winforms and native C# libraries, with the dedication to simulate human hand movement.
 
-This is a beginner's project and do not expect good code. Despite application will have full functionality, expect bad practices and non-optimal implementations in source code. You are more than welcome to make suggestions and fork this.
+**This is a beginner's project.** Do not expect good code. Despite application will have full functionality, expect bad practices and non-optimal implementations in source code. You are more than welcome to make suggestions and fork this. The UI is Boeing-737 cockpit styled, as I've been obsessed with aviation simulation lately.
+
+**Autosu! does not read or write memory.** Autosu! operates purely on reading the beatmap (.osu) files. However, this means Autosu! cannot automatically detect the start of a song and cannot automatically read the current progress of a song. Manual calibration is required.
 
 **Logging out and disconnection from Bancho is recommended.** Submitting scores played by Autosu! to Bancho is against osu! rules. This is cheating. Violators' accounts will be restricted.
 
