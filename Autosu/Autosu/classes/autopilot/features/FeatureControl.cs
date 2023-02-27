@@ -33,6 +33,7 @@ namespace Autosu.classes.autopilot {
                     break;
 
                 case "spinrandom": config.features.spinnerRandom = !config.features.spinnerRandom && config.features.spinnerOffset; break;
+                case "sliderhalt": config.features.shortSliderHalt = !config.features.shortSliderHalt; break;
 
 
             }

@@ -55,16 +55,22 @@ namespace Autosu.classes {
         public object songData {
             get {
                 Dictionary<string, List<string>> titles = new();
+                Dictionary<string, List<int>> difficulties = new();
 
                 foreach (var beatmap in beatmaps) {
-                    if (titles.ContainsKey(beatmap.title)) titles[beatmap.title].Add(beatmap.variation);
-                    else titles[beatmap.title] = new List<string> { beatmap.variation };
-
+                    if (titles.ContainsKey(beatmap.title)) {
+                        titles[beatmap.title].Add(beatmap.variation);
+                        difficulties[beatmap.title].Add(beatmap.overallDifficulty);
+                    } else {
+                        titles[beatmap.title] = new List<string> { beatmap.variation };
+                        difficulties[beatmap.title] = new List<int> { beatmap.overallDifficulty };
+                    }
                 }
 
                 return new { 
                     beatmaps = titles,
-                    path = beatmapPath.Replace("\\", "\\\\")
+                    path = beatmapPath.Replace("\\", "\\\\"),
+                    difficulties = difficulties,
                 };
             }
         }

@@ -42,7 +42,7 @@ upstream.initAutopilot().then(res => {
 
 $g("@disengage").nextElementSibling.addEventListener("click", () => returnToMenu());
 
-//upstream.openDev();
+upstream.openDev();
 
 $g("@profile-read").addEventListener("click", () => {
     var name = $g("!profile-load").value || $g("!profile-load").placeholder;
@@ -79,6 +79,7 @@ setInterval(() => {
     $g("!targetloc-offset").disabled = !getEnabled($g("toggle:targetoffset"));
     $g("!targetloc-thresh").disabled = !getEnabled($g("toggle:targetoffset"));
     $g("!spinner-rand").disabled = !getEnabled($g("toggle:spinrandom"));
+    $g("!sliderhalt-thresh").disabled = !getEnabled($g("toggle:sliderhalt"));
 
     upstream.requestAnnunciatorStatus().then(res => {
         for (let key in res){

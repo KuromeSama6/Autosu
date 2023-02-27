@@ -1,4 +1,5 @@
 currentBeatmaps = [];
+currentDifficulties = [];
 selected = {
     title: "",
     variation: ""
@@ -9,6 +10,7 @@ function selectFiles(data){
 
     _("$current-beatmaps-path", data.path.replaceAll("\\\\", "\\"));
     currentBeatmaps = data.beatmaps;
+    currentDifficulties = data.difficulties;
     renderSongs("");
 }
 
@@ -62,6 +64,10 @@ function notifyFailedFiles(files){
 
     }
 
+    if (files.length > 0){
+        _("message", `${$g("message").innerHTML}<br>${files.length} beatmaps failed to load because it is of a older format, or is corrupted.`);
+    }
+
 }
 
 //upstream.openDev();
@@ -72,10 +78,11 @@ function renderDifficulties(title){
     // render the difficulties
     for (let ele of $g("difficulty-container").querySelectorAll("a")) if (ele.id != "difficulty-listing-template") ele.remove();
     for (let difficulty of currentBeatmaps[title]) {
+        let index = currentBeatmaps[title].indexOf(difficulty);
         let ele = Clone($g("difficulty-container"), $g("difficulty-listing-template"));
         ele.hidden = false;
         ele.id = "";
-        ele.innerHTML = difficulty;
+        ele.innerHTML = `${difficulty} [${currentDifficulties[title][index] / 10}]`;
 
         ele.addEventListener("click", () => {
             startBtn.hidden = true;
@@ -122,6 +129,7 @@ $g("@reload-btn").addEventListener('click', () => {
     for (let ele of $g("beatmaps-container").querySelectorAll("a")) if (ele.id != "beatmap-listing-template") ele.remove();
     _("message", `Loading`);
     currentBeatmaps = [];
+    currentDifficulties = [];
     selected = {
         title: "",
         variation: ""

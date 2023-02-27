@@ -89,7 +89,10 @@ namespace Autosu.classes.autopilot {
                 var pos = extendMoveQueue[0];
                 //Debug.WriteLine(pos.ToString());
                 extendMoveQueue.RemoveAt(0);
-                if (status == EAutopilotMasterState.FULL && config.features.mnav) MouseUtil.SetCursor(new((int) Math.Round(pos.X), (int) Math.Round(pos.Y)));
+
+                // will refuse to execute zero positions (placeholder positions)
+                if (status == EAutopilotMasterState.FULL && config.features.mnav && pos != Vector2.Zero) MouseUtil.SetCursor(new((int) Math.Round(pos.X), (int) Math.Round(pos.Y)));
+            
             } else if (extendMoveQueue.Count <= 0 && extendQueueStarted) {
                 extendQueueStarted = false;
                 //Debug.Print("************SLIDER END");
@@ -169,12 +172,13 @@ namespace Autosu.classes.autopilot {
                     /// more time + less distance = small offset
                     /// more time + more distance = medium offset
                     /// Distance threshold defines less or more distance
+                    float offsetDistance = 0f;
                     if (config.features.targetOffset && timeDiff > config.inputs.targetOffsetThreshold) {
                         float distanceThreshold = config.inputs.targetOffsetAmount;
                         float distMultiplier = dist > distanceThreshold ? 1.2f : 1f;
                         float timeMultiplier = timeDiff > 300 ? timeDiff > 50 ? 0.7f : 0f : 1f;
-
-                        targetPos = APUtil.OffsetLocation(targetPos, (float) config.inputs.targetOffsetAmount / 100f * (distMultiplier * timeMultiplier) * beatmap.realCircleRadius);
+                        offsetDistance = (float) config.inputs.targetOffsetAmount / 100f * (distMultiplier * timeMultiplier) * beatmap.realCircleRadius;
+                        targetPos = APUtil.OffsetLocation(targetPos, offsetDistance);
                     }
 
                     //targetPos = navTarget.pos;
@@ -197,21 +201,30 @@ namespace Autosu.classes.autopilot {
                         Vector2 startPos = APUtil.OsuPixelToScreen(slider.pos);
 
                         // path is for a single slide
-                        Vector2[] singlePath = slider.curveType switch {
-                            ESliderCurveType.BEZIER => MouseUtil.GetLinearPathSlider(startPos, slider.actualPoints.ToArray(), duration, sysLatency),
+                        // remember mouse halt
+                        int approachCircleRadius = (int)(circleRadius * (187f / 106f));
 
-                            ESliderCurveType.PERFECT => MouseUtil.GetCircularPath(
-                                startPos,
-                                slider.actualPoints[0],
-                                slider.actualPoints[1],
-                                duration,
-                                sysLatency
-                            ),
+                        // halt on short slider
+                        const float distThresh = 2.75f;
+                        // take random target offset into account
+                        int circleDist = config.features.shortSliderHalt ? (int) ((approachCircleRadius - circleRadius) * distThresh) : -1;
 
-                            _ => MouseUtil.GetLinearPath(
-                                startPos, slider.actualPoints[slider.actualPoints.Length - 1], duration, sysLatency
-                            )
-                        };
+                        Vector2[] singlePath;
+                        switch (slider.curveType) {
+                            case ESliderCurveType.BEZIER:
+                                singlePath = MouseUtil.GetLinearPathSlider(startPos, slider.actualPoints.ToArray(), duration, sysLatency, circleDist);
+                                break;
+
+                            case ESliderCurveType.PERFECT:
+                                singlePath = MouseUtil.GetCircularPath(startPos, slider.actualPoints[0], slider.actualPoints[1], duration, sysLatency, circleDist);
+                                break;
+
+                            default:
+                                float linearDistance = Vector2.Distance(startPos, slider.actualPoints[slider.actualPoints.Length - 1]);
+                                singlePath = linearDistance > circleDist ? MouseUtil.GetLinearPath(startPos, slider.actualPoints[slider.actualPoints.Length - 1], duration, sysLatency):
+                                    MouseUtil.GetPlaceholderPath(duration, sysLatency);
+                                break;
+                        }
 
                         List<Vector2> finalPath = new();
                         bool reversePath = false;

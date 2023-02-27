@@ -30,7 +30,7 @@ namespace Autosu.classes.autopilot {
         }
 
         public void LoadBeatmap(Beatmap beatmap) {
-            inputs.difficultyOverload = beatmap.overallDifficulty;
+            
         }
 
     }
@@ -45,7 +45,7 @@ namespace Autosu.classes.autopilot {
         public bool moveDelay = false;
         public bool targetOffset = true;
         public bool blankAddMouse = false;
-        public bool humanSlider = false;
+        public bool humanSlider = true;
         public bool shortSliderHalt = true;
         public bool spinnerOffset = true;
         public bool spinnerRandom = true;
@@ -65,7 +65,7 @@ namespace Autosu.classes.autopilot {
         public int targetOffsetAmount = 30;
         public int targetOffsetThreshold = 90;
         public int spinnerRandomAmount = 70;
-        public int difficultyOverload;
+        public int sliderHaltThreshold = 275;
     }
 
 }

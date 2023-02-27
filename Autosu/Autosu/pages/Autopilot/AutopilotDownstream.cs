@@ -47,6 +47,7 @@ namespace Autosu.Pages.Bot {
                 case "targetloc-offset": Autopilot.i.config.inputs.targetOffsetAmount = value; break;
                 case "targetloc-thresh": Autopilot.i.config.inputs.targetOffsetThreshold = value; break;
                 case "spinner-rand": Autopilot.i.config.inputs.spinnerRandomAmount = value; break;
+                case "sliderhalt-thresh": Autopilot.i.config.inputs.sliderHaltThreshold = value; break;
             }
         }
 

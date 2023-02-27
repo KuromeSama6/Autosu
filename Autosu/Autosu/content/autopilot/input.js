@@ -53,8 +53,8 @@ setInterval(() => {
         setInputValue($g("!minimum-acc"), inputs.minimumAcc);
         setInputValue($g("!targetloc-offset"), inputs.targetOffsetAmount);
         setInputValue($g("!spinner-rand"), inputs.spinnerRandomAmount);
-        setInputValue($g("!difficulty-override"), inputs.difficultyOverload);
         setInputValue($g("!targetloc-thresh"), inputs.targetOffsetThreshold);
+        setInputValue($g("!sliderhalt-thresh"), inputs.sliderHaltThreshold);
 
         $g("!cal-offset").disabled = !res.enableCalib
         $g("!cal-offset").value = res.calib == 0 ? `STD` : `${res.calib >= 0 ? "+" : "-"}${Math.abs(res.calib).toString().padStart(3, '0')}`;

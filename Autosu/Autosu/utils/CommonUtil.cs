@@ -83,7 +83,13 @@ namespace Autosu.Utils {
             Dictionary<string, string> ret = new();
             foreach (string line in input) {
                 if (line.Split(':').Length > 1) {
-                    ret.Add(line.Split(':')[0], line.Split(':')[1]);
+                    string content = line.Split(':')[1];
+                    if (content.Length >= 2 && content.Substring(0, 1) == " ") {
+                        content = content.Substring(1);
+                        //Debug.WriteLine($"found {line} -> {content}");
+                    }
+
+                    ret.Add(line.Split(':')[0], content);
                     
                 }
             }

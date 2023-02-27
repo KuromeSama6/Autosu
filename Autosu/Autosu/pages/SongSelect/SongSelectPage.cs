@@ -68,6 +68,7 @@ namespace Autosu {
             if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.LeftArrow) Autopilot.i.TryRegularCalib(false);
 
             if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryN1Calib();
+            if (e.KeyCode == VirtualKeycodes.A && Autopilot.i.navTarget != null) Debug.WriteLine($"Mark placed at: #{Autopilot.i.navTarget.time}");
 
             if (AutopilotPage.instance != null) {
                 switch (e.KeyCode) {

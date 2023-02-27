@@ -296,7 +296,7 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 				</div>
 				<div class="d-flex flex-row">
 					<div class="input-box">
-						<small style="display:inline-block">ACC MIN</small><br>
+						<small style="display:inline-block">CRUISE ACC</small><br>
 						<input type="number" id="!minimum-acc" style="width: 2em;" class="boeing-input" min="0" max="100" value="095" data-digits="3"><br>
 					</div>
 					<div class="input-box">
@@ -308,8 +308,8 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 						<input type="number" id="!spinner-rand" style="width: 2em;" class="boeing-input" min="0" max="100" value="050" data-digits="3"><br>
 					</div>
 					<div class="input-box">
-						<small style="display:inline-block">DIFFICULTY OVRD</small><br>
-						<input type="number" id="!difficulty-override" style="width: 2em;" class="boeing-input" min="0" max="1000" value="000" data-digits="3"><br>
+						<small style="display:inline-block">SLIDER HALT DIST THRESH MULT</small><br>
+						<input type="number" id="!sliderhalt-thresh" style="width: 2em;" class="boeing-input" min="0" max="1000" value="000" data-digits="3"><br>
 					</div>
 				</div>
 			</div>
@@ -321,18 +321,16 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					<li>HOME - Toggle Overlay</li>
 					<li>C - First Note Calibration</li>
 					<li>CONTROL + L/R ARROW - Realtime Calibration</li>
-					<li>END - Same as pressing <code>DISENGAGE</code></li>
-					<li>Press <code>DISENGAGE</code> to exit autopilot command, or to return to menu.</li>
+					<li>END - <code>DISENGAGE</code></li>
+					<li>SHIFT + END - Force quit</li>
 				</ul>
-				<h6>Operation</h6>
-				<ol>
-					<li>Configure autopilot</li>
-					<li>Start <code>A/P CMD</code> or <code>A/P DEBUG</code></li>
-					<li>Check: <code>A/P</code> annunciator - AMBER</li>
-					<li>After configuration, open Osu!</li>
-					<li>Have target song selected</li>
-					<li>Click bottom right start button and do not move mouse until settings bar drops.</li>
-				</ol>
+				<h6>Disengage</h6>
+				<ul>
+					<li><b>Slient Disengage</b>: Song Completed</li>
+					<li><b>Noisy Disengage + HNAV FAULT flashing</b>: Hit (keyboard presses) timing error, mouse too far from target at judgement time.</li>
+					<li><b>Noisy Disengage + MNAV DESYNC flashing</b>: Mouse movement timing error, system clock cannot keep up with movement instructions.</li>
+					<li><b>Noisy Disengage</b>: <code>DISENGAGE</code> pressed.</li>
+				</ul>
 			</div>
 
 		</div>

@@ -50,6 +50,7 @@ namespace Autosu.Utils {
 
             // Calculate the total distance to move and the number of steps required
             float distance = (float) Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
             int numSteps = (int) Math.Ceiling(durationMs / (float) stepMs);
             float stepSize = distance / numSteps;
 
@@ -83,7 +84,7 @@ namespace Autosu.Utils {
 
         }
 
-        public static Vector2[] GetLinearPathSlider(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs) {
+        public static Vector2[] GetLinearPathSlider(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs, int haltDist = -1) {
             stepMs = Math.Max(stepMs, 1);
             List<Vector2> ret = new();
             ret.Add(currentPos);
@@ -93,6 +94,9 @@ namespace Autosu.Utils {
             List<Vector2> totalPoints = new List<Vector2> { currentPos};
             totalPoints.AddRange(positions);
             for (int i = 0; i < totalPoints.Count - 1; i++) totalDist += Vector2.Distance(totalPoints[i], totalPoints[i + 1]);
+
+            // give placeholder
+            if (totalDist < haltDist) return GetPlaceholderPath(durationMs, stepMs);
 
             Vector2 startFrom = currentPos;
             foreach (var pos in positions) {
@@ -132,6 +136,14 @@ namespace Autosu.Utils {
             return intermediatePoints.ToArray();
         }
 
+        public static Vector2[] GetPlaceholderPath(int durationMs, int stepMs) {
+            stepMs = Math.Max(stepMs, 1);
+            List<Vector2> ret = new();
+            int stepCount = durationMs / stepMs;
+            for (int i = 0; i < stepCount; i++) ret.Add(Vector2.Zero);
+
+            return ret.ToArray();
+        }
 
         private static Vector2 CalculateBezierPoint(float t, Vector2[] controlPoints) {
             int n = controlPoints.Length - 1;
@@ -159,7 +171,7 @@ namespace Autosu.Utils {
             return result;
         }
 
-        public static Vector2[] GetCircularPath(Vector2 startPos, Vector2 midPoint, Vector2 endPos, int durationMs, int stepMs) {
+        public static Vector2[] GetCircularPath(Vector2 startPos, Vector2 midPoint, Vector2 endPos, int durationMs, int stepMs, int haltDist) {
             stepMs = Math.Max(stepMs, 1);
 
             List<Vector2> positions = new List<Vector2>();
@@ -187,16 +199,32 @@ namespace Autosu.Utils {
             // Calculate the angles from the center to the start and end points
             float startAngle = (float) Math.Atan2(startPos.Y - centerY, startPos.X - centerX);
             float endAngle = (float) Math.Atan2(endPos.Y - centerY, endPos.X - centerX);
+            //Debug.WriteLine($"start: {startAngle * 180f / MathF.PI}; end: {endAngle * 180f / MathF.PI}");
 
             // Calculate the total angle to sweep and the number of steps required
             float sweepAngle = endAngle - startAngle;
-            if (sweepAngle < 0) {
+            //Debug.WriteLine($"swp angle 1: {sweepAngle * 180f / MathF.PI}");
+
+            if (sweepAngle < 0f) {
                 sweepAngle += (float) (2 * Math.PI);
             }
+            //Debug.WriteLine($"swp angle 2: {sweepAngle * 180f / MathF.PI}");
 
+            //if (sweepAngle > Math.PI && !(startAngle / Math.Abs(startAngle) != endAngle / Math.Abs(endAngle) && Math.Abs(startAngle - endAngle) >= MathF.PI / 2f)) {
             if (sweepAngle > Math.PI) {
                 sweepAngle = -((float) Math.PI * 2 - sweepAngle);
+               /* Debug.WriteLine("operation");
+                Debug.WriteLine($"Diff signs: {startAngle / (-startAngle) != endAngle / (-endAngle)}");
+                Debug.WriteLine($"start: {startAngle / (-startAngle)}");
+                Debug.WriteLine($"end: {endAngle / (-endAngle)}")*/;
             }
+
+
+            //Debug.WriteLine($"swp angle 3: {sweepAngle * 180f / MathF.PI}");
+
+            if (MathF.Abs(sweepAngle) < (MathF.PI / 2f) && Vector2.Distance(startPos, endPos) < haltDist) return GetPlaceholderPath(durationMs, stepMs);
+
+            //Debug.WriteLine($"-> {sweepAngle * 180f / MathF.PI} {(sweepAngle != sweepAngleMem ? $"DIFF! (from {sweepAngleMem * 180f / MathF.PI})" : "")}");
 
             //Debug.WriteLine($"swp angle = {sweepAngle * 180f / (float)Math.PI}");
 

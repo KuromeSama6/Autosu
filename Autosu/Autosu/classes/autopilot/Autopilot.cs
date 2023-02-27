@@ -27,13 +27,13 @@ namespace Autosu.classes.autopilot {
         #region Fields - Threading and Timing related
         private Stopwatch playhead = new();
         public int time => (int) playhead.ElapsedMilliseconds + n1Offset + calibOffset;
+        private HighAccuracyTimer highAccuracyTimer;
+        private HighAccuracyTimer normalCycleTimer;
         private Thread thread;
         private readonly Stopwatch cycleTimer = new();
         private System.Threading.Timer threadTimer;
         private long nextUpdateTime;
         private bool keepGoing = true;
-        private HighAccuracyTimer highAccuracyTimer;
-        private HighAccuracyTimer normalCycleTimer;
         public Stopwatch sysLatencyTimer = new();
         public int sysLatency { get; private set; }
         public SoundPlayer apDisconnectPlayer = new (CommonUtil.ParsePath("resources/audio/ap_disconnect.wav"));
@@ -146,7 +146,6 @@ namespace Autosu.classes.autopilot {
             // sync warnings
             i.hnavFaultWarn = hnavFaultWarn;
             i.mnavDesyncWarn = mnavDesyncWarn;
-
             AutopilotPage.instance.Invoke(() => AutopilotPage.instance.SetOverlay(true, true));
 
 

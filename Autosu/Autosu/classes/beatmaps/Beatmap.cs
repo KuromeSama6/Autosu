@@ -91,11 +91,12 @@ namespace Autosu.Classes {
 
             mode = (EBeatmapMode) int.Parse(general["Mode"]);
             previewStartTime = int.Parse(general["PreviewTime"]);
-            audioPath = $@"{Path.GetDirectoryName(path)}\{general["AudioFilename"].Substring(1)}";
+            audioPath = $@"{Path.GetDirectoryName(path)}\{general["AudioFilename"]}";
 
             overallDifficulty = (int) (float.Parse(difficulty["OverallDifficulty"]) * 10);
             circleSize = float.Parse(difficulty["CircleSize"]);
-            approachRate = float.Parse(difficulty["ApproachRate"]);
+
+            approachRate = difficulty.ContainsKey("ApproachRate") ? float.Parse(difficulty["ApproachRate"]) : 5f;
             sliderMultiplier = float.Parse(difficulty["SliderMultiplier"]);
 
             title = metadata["Title"];
@@ -125,7 +126,7 @@ namespace Autosu.Classes {
                     type = EHitObjectType.SPINNER,
                     endTime = int.Parse(args[5])
                 });
-                else if (args[5].Contains("|")) objects.Add(new SliderObject(args[5]) {
+                else if (args.Length >= 6 && args[5].Contains("|")) objects.Add(new SliderObject(args[5]) {
                     pos = new Vector2(x, y),
                     time = time,
                     repeats = int.Parse(args[6]),
