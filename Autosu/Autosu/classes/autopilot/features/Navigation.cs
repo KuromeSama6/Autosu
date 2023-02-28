@@ -43,6 +43,8 @@ namespace Autosu.classes.autopilot {
         public int abortCount = 0;
         public bool abortCatch;
         private bool extendQueueStarted;
+        private int nextMoveDelay = 0;
+        private int nextHitDelay = 0;
 
         // premature call will abort current path
         public void NextNav() {
@@ -107,14 +109,18 @@ namespace Autosu.classes.autopilot {
         public void NavUpdate() {
             // mouse
             int mnavThreshold = Math.Min(1000, beatmap.visualPeriod);
-            const int hnavThreshold = 0;
+            int hnavThreshold = 0 + nextHitDelay;
 
             if (pathingMode == EPathingControlMode.KEYBOARD && navTarget.time - time < hnavThreshold) {
                 // keyboard
 
                 // movement target clears after key press
                 float distance = Vector2.Distance(new(Cursor.Position.X, Cursor.Position.Y), APUtil.OsuPixelToScreen(navTarget.pos));    
-                if (mouseMoveQueueFinished) {
+                if (mouseMoveQueueFinished || (hnavThreshold > 0 && mouseMoveQueue.Count <= Math.Abs(nextHitDelay))) {
+
+                    mouseMoveQueue.Clear();
+                    mouseMoveQueueFinished = true;
+
                     if (navTarget is SliderObject) {
                         SliderObject slider = (SliderObject) navTarget;
                         extendQueueStarted = true;
@@ -136,6 +142,10 @@ namespace Autosu.classes.autopilot {
                         NextNav();
                         // return control to the mouse
                         pathingMode = EPathingControlMode.MOUSE;
+
+                        // calculate the next movement delay
+                        nextMoveDelay = config.features.moveDelay ? new Random().Next(-config.inputs.mnavDelayRef, config.inputs.mnavDelayRef) : 0;
+
                     }
 
                 } else {
@@ -153,8 +163,8 @@ namespace Autosu.classes.autopilot {
             } 
 
             if (pathingMode == EPathingControlMode.MOUSE) {
-                if (navTarget.time - time < mnavThreshold) {
-                    int timeDiff = navTarget.time - time;
+                int timeDiff = navTarget.time - time - nextMoveDelay;
+                if (timeDiff < mnavThreshold - nextMoveDelay) {
 
                     // mnav desync warning (threshold = 60)
                     if (mouseMoveQueue.Count > 60) {
@@ -181,7 +191,7 @@ namespace Autosu.classes.autopilot {
                         targetPos = APUtil.OffsetLocation(targetPos, offsetDistance);
                     }
 
-                    //targetPos = navTarget.pos;
+                    // get the move to target path
 
                     float circleRadius = APUtil.OsuPixelDistance(54.5f - 4.48f * beatmap.circleSize);
                     Vector2[] path = MouseUtil.GetLinearPath(
@@ -190,8 +200,9 @@ namespace Autosu.classes.autopilot {
                         Math.Min(navTarget.time - time, mnavThreshold), 
                         sysLatency
                     );
+                    mouseMoveQueue.AddRange(path);
 
-                    foreach (var pos in path) mouseMoveQueue.Add(pos);
+                    nextHitDelay = config.features.hitDelay ? new Random().Next(-config.inputs.hnavDelayRef, 0) : 0;
 
                     // slider
                     if (navTarget is SliderObject) {

@@ -40,9 +40,9 @@ namespace Autosu.classes.autopilot {
         public bool hnav = true;
         public bool mnav = true;
         public bool n1 = true;
-        public bool hitDelay = false;
+        public bool hitDelay = true;
         public bool accuracySelect = false;
-        public bool moveDelay = false;
+        public bool moveDelay = true;
         public bool targetOffset = true;
         public bool blankAddMouse = false;
         public bool humanSlider = true;
@@ -59,10 +59,10 @@ namespace Autosu.classes.autopilot {
 
     [Serializable]
     public class APValueInput {
-        public int hnavDelayRef = 0;
-        public int mnavDelayRef = 0;
+        public int hnavDelayRef = 5;
+        public int mnavDelayRef = 35;
         public int minimumAcc = 95;
-        public int targetOffsetAmount = 30;
+        public int targetOffsetAmount = 35;
         public int targetOffsetThreshold = 90;
         public int spinnerRandomAmount = 70;
         public int sliderHaltThreshold = 275;

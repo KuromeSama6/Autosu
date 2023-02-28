@@ -99,7 +99,7 @@ namespace Autosu.Classes {
             approachRate = difficulty.ContainsKey("ApproachRate") ? float.Parse(difficulty["ApproachRate"]) : 5f;
             sliderMultiplier = float.Parse(difficulty["SliderMultiplier"]);
 
-            title = metadata["Title"];
+            title = $"{metadata["Title"]} ({metadata["Creator"]})";
             variation = metadata["Version"];
             // load hitobjects
             var hitObjects = CommonUtil.ExtractStringSection(file, "[HitObjects]");

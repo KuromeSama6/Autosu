@@ -48,6 +48,8 @@ namespace Autosu.Pages.Bot {
                 case "targetloc-thresh": Autopilot.i.config.inputs.targetOffsetThreshold = value; break;
                 case "spinner-rand": Autopilot.i.config.inputs.spinnerRandomAmount = value; break;
                 case "sliderhalt-thresh": Autopilot.i.config.inputs.sliderHaltThreshold = value; break;
+                case "hitdelay-sel": Autopilot.i.config.inputs.hnavDelayRef = value; break;
+                case "movedelay-sel": Autopilot.i.config.inputs.mnavDelayRef = value; break;
             }
         }
 

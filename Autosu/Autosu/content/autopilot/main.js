@@ -42,7 +42,7 @@ upstream.initAutopilot().then(res => {
 
 $g("@disengage").nextElementSibling.addEventListener("click", () => returnToMenu());
 
-upstream.openDev();
+//upstream.openDev();
 
 $g("@profile-read").addEventListener("click", () => {
     var name = $g("!profile-load").value || $g("!profile-load").placeholder;

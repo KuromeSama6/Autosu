@@ -35,6 +35,24 @@ namespace Autosu.classes.autopilot {
                 case "spinrandom": config.features.spinnerRandom = !config.features.spinnerRandom && config.features.spinnerOffset; break;
                 case "sliderhalt": config.features.shortSliderHalt = !config.features.shortSliderHalt; break;
 
+                case "delayhit":
+                    config.features.hitDelay = !config.features.hitDelay;
+                    if (config.features.hitDelay) config.features.accuracySelect = false;
+                    break;
+
+                case "delaymove":
+                    config.features.moveDelay = !config.features.moveDelay;
+                    if (config.features.moveDelay) config.features.accuracySelect = false;
+                    break;
+
+                case "accsel":
+                    config.features.accuracySelect = !config.features.accuracySelect;
+                    if (config.features.accuracySelect) {
+                        config.features.moveDelay = false;
+                        config.features.hitDelay = false;
+                    }
+                    break;
+
 
             }
         }

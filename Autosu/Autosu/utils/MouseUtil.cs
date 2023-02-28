@@ -199,34 +199,33 @@ namespace Autosu.Utils {
             // Calculate the angles from the center to the start and end points
             float startAngle = (float) Math.Atan2(startPos.Y - centerY, startPos.X - centerX);
             float endAngle = (float) Math.Atan2(endPos.Y - centerY, endPos.X - centerX);
-            //Debug.WriteLine($"start: {startAngle * 180f / MathF.PI}; end: {endAngle * 180f / MathF.PI}");
 
             // Calculate the total angle to sweep and the number of steps required
             float sweepAngle = endAngle - startAngle;
-            //Debug.WriteLine($"swp angle 1: {sweepAngle * 180f / MathF.PI}");
 
             if (sweepAngle < 0f) {
                 sweepAngle += (float) (2 * Math.PI);
             }
-            //Debug.WriteLine($"swp angle 2: {sweepAngle * 180f / MathF.PI}");
 
-            //if (sweepAngle > Math.PI && !(startAngle / Math.Abs(startAngle) != endAngle / Math.Abs(endAngle) && Math.Abs(startAngle - endAngle) >= MathF.PI / 2f)) {
-            if (sweepAngle > Math.PI) {
+            Vector2 startToEnd = endPos - startPos;
+            float oppositeAngle = (float) Math.Atan2(startToEnd.Y, startToEnd.X) + (float) Math.PI;
+
+            /*if (sweepAngle > Math.PI) {
                 sweepAngle = -((float) Math.PI * 2 - sweepAngle);
-               /* Debug.WriteLine("operation");
-                Debug.WriteLine($"Diff signs: {startAngle / (-startAngle) != endAngle / (-endAngle)}");
-                Debug.WriteLine($"start: {startAngle / (-startAngle)}");
-                Debug.WriteLine($"end: {endAngle / (-endAngle)}")*/;
+            }*/
+
+            // Check direction of sweep angle and reverse it if it is greater than pi
+            if (Math.Abs(sweepAngle) > Math.PI) {
+                if (sweepAngle > 0) {
+                    sweepAngle -= (float) (2 * Math.PI);
+                } else {
+                    sweepAngle += (float) (2 * Math.PI);
+                }
             }
 
 
-            //Debug.WriteLine($"swp angle 3: {sweepAngle * 180f / MathF.PI}");
-
             if (MathF.Abs(sweepAngle) < (MathF.PI / 2f) && Vector2.Distance(startPos, endPos) < haltDist) return GetPlaceholderPath(durationMs, stepMs);
 
-            //Debug.WriteLine($"-> {sweepAngle * 180f / MathF.PI} {(sweepAngle != sweepAngleMem ? $"DIFF! (from {sweepAngleMem * 180f / MathF.PI})" : "")}");
-
-            //Debug.WriteLine($"swp angle = {sweepAngle * 180f / (float)Math.PI}");
 
             int numSteps = (int) Math.Ceiling(durationMs / (float) stepMs);
             float stepAngle = sweepAngle / numSteps;
