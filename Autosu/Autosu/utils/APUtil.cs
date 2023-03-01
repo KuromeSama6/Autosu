@@ -35,15 +35,7 @@ namespace Autosu.Utils {
         }
 
         public static float OsuPixelDistance(float dist) {
-            // Get the screen size in pixels
-            int screen_width = Screen.PrimaryScreen.Bounds.Width;
-            int screen_height = Screen.PrimaryScreen.Bounds.Height;
-
-            // Calculate the conversion factor based on the current screen resolution
-            float conversion_factor = (screen_width / 640f + screen_height / 480f) / 2f;
-
-            // Convert the distance from osu!pixels to pixels
-            return dist * conversion_factor;
+            return Vector2.Distance(OsuPixelToScreen(new(0, 0)), OsuPixelToScreen(new(dist, dist)));
         }
 
         public static void PlayAnnunciatorAlert() {

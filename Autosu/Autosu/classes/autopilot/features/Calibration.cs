@@ -30,7 +30,7 @@ namespace Autosu.classes.autopilot {
             }
 
             // 15ms sysclock delay, offset by adding time
-            int currentTime = firstNote.time + 40;
+            int currentTime = firstNote.time;
             n1Offset = currentTime - time;
 
             n1Init = true;
@@ -39,7 +39,14 @@ namespace Autosu.classes.autopilot {
         public void TryRegularCalib(bool laterDirection) {
             if (status != EAutopilotMasterState.FULL) return;
 
-            calibOffset += 2 * (laterDirection ? -1 : 1);
+            int offset = 2 * (laterDirection ? -1 : 1);
+            calibOffset += offset;
+
+            if (playheadTime < 15000) {
+                foreach (var result in results) {
+                    result.realDelay += offset;
+                }
+            }
 
         }
 

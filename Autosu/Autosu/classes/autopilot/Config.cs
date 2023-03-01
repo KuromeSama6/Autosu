@@ -54,7 +54,7 @@ namespace Autosu.classes.autopilot {
         public bool humanDistraction = false;
         public bool autoSwitch = false;
         public bool takeoverStandby = true;
-        public bool panic = false;
+        public bool playDetent = false;
     }
 
     [Serializable]
@@ -65,7 +65,7 @@ namespace Autosu.classes.autopilot {
         public int targetOffsetAmount = 35;
         public int targetOffsetThreshold = 90;
         public int spinnerRandomAmount = 70;
-        public int sliderHaltThreshold = 275;
+        public int sliderHaltThreshold = 150;
     }
 
 }

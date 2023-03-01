@@ -16,6 +16,8 @@ namespace Autosu.Classes {
         public int time;
         public EHitObjectType type;
 
+        public bool keyPressed = false;
+
     }
 
     [Serializable]

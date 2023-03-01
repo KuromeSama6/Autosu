@@ -59,5 +59,8 @@ setInterval(() => {
         $g("!cal-offset").disabled = !res.enableCalib
         $g("!cal-offset").value = res.calib == 0 ? `STD` : `${res.calib >= 0 ? "+" : "-"}${Math.abs(res.calib).toString().padStart(3, '0')}`;
 
+        $g("!acc-disp").disabled = !res.enableAccDisp
+        $g("!acc-disp").value = `${Math.round(res.acc * 100).toString().padStart(5, '0')}`;
+
     });
 }, 1);

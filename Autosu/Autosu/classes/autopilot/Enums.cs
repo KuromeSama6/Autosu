@@ -32,4 +32,11 @@ namespace Autosu.classes.autopilot {
         KEYBOARD
     }
 
+    public enum EHitResult {
+        THREEHUNDRED,
+        ONEHUNDRED,
+        FIFTY,
+        BAD
+    }
+
 }

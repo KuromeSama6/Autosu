@@ -37,6 +37,7 @@ upstream.initAutopilot().then(res => {
     $g("preview-img").src = res.bgPath;
     _("$chosen-beatmap-title", res.bmTitle);
     _("$chosen-beatmap-desc", res.bmDifficulty);
+    _("$timing-boundary", `${res.timingBoundary}ms`);
 
 });
 

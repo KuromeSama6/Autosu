@@ -32,6 +32,7 @@
 			<div class="col-5">
 				<h2 id="$chosen-beatmap-title">UNABLE LOAD BEATMAP</h2>
 				<p>Variation: <b id="$chosen-beatmap-desc">UNABLE LOAD VARIATION</b></p>
+				<p>300/100 Boundary: <b id="$timing-boundary">-</b></p>
 				<p id="$next-object"></p>
 			</div>
 			<div class="col-5 d-flex justify-content-end align-items-center position-relative">
@@ -278,6 +279,12 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 				</div>
 				<div class="d-flex flex-row">
 					<div class="input-box">
+						<small style="display:inline-block">ACT ACC XXX.XX%</small><br>
+						<input type="text" id="!acc-disp" style="width: 3em;" class="boeing-input" min="0" max="10000" value="-----" data-digits="5"><br>
+					</div>
+				</div>
+				<div class="d-flex flex-row">
+					<div class="input-box">
 						<small style="display:inline-block">HNAV DLY MS MAX</small><br>
 						<input type="number" id="!hitdelay-sel" style="width: 2.5em;" class="boeing-input" min="0" max="9999" value="0065" data-digits="4"><br>
 					</div>
@@ -293,6 +300,7 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 						<small style="display:inline-block">TARGET LOC DIST THRESH</small><br>
 						<input type="number" id="!targetloc-thresh" style="width: 2.5em;" class="boeing-input" min="0" max="1000" value="0090" data-digits="4"><br>
 					</div>
+					
 				</div>
 				<div class="d-flex flex-row">
 					<div class="input-box">
@@ -308,7 +316,7 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 						<input type="number" id="!spinner-rand" style="width: 2em;" class="boeing-input" min="0" max="100" value="050" data-digits="3"><br>
 					</div>
 					<div class="input-box">
-						<small style="display:inline-block">SLIDER HALT DIST THRESH MULT</small><br>
+						<small style="display:inline-block">SLIDER HALT DIST THRESH</small><br>
 						<input type="number" id="!sliderhalt-thresh" style="width: 2em;" class="boeing-input" min="0" max="1000" value="000" data-digits="3"><br>
 					</div>
 				</div>
@@ -321,6 +329,7 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					<li>HOME - Toggle Overlay</li>
 					<li>C - First Note Calibration</li>
 					<li>CONTROL + L/R ARROW - Realtime Calibration</li>
+					<li>CONTROL + PGUP/PGDOWN - Accuracy Padding</li>
 					<li>END - <code>DISENGAGE</code></li>
 					<li>SHIFT + END - Force quit</li>
 				</ul>

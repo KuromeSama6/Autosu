@@ -62,10 +62,14 @@ namespace Autosu {
 
         private void MainKeyboardDown(object sender, GlobalKeyEventArgs e) {
             if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.End) Environment.Exit(0);
-            
+
             // regular
-            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.RightArrow) Autopilot.i.TryRegularCalib(true);
-            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift) && e.KeyCode == VirtualKeycodes.LeftArrow) Autopilot.i.TryRegularCalib(false);
+            if (new List<VirtualKeycodes>(globalKeyHook.KeysBeingPressed).Contains(VirtualKeycodes.LeftShift)) {
+                if (e.KeyCode == VirtualKeycodes.RightArrow) Autopilot.i.TryRegularCalib(true);
+                if (e.KeyCode == VirtualKeycodes.LeftArrow) Autopilot.i.TryRegularCalib(false);
+                if (e.KeyCode == VirtualKeycodes.PageUp) Autopilot.i.PadAccuracy(true);
+                if (e.KeyCode == VirtualKeycodes.PageDown) Autopilot.i.PadAccuracy(false);
+            }
 
             if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryN1Calib();
             if (e.KeyCode == VirtualKeycodes.A && Autopilot.i.navTarget != null) Debug.WriteLine($"Mark placed at: #{Autopilot.i.navTarget.time}");

@@ -27,6 +27,7 @@ namespace Autosu.classes.autopilot {
         #region Fields - Threading and Timing related
         private Stopwatch playhead = new();
         public int time => (int) playhead.ElapsedMilliseconds + n1Offset + calibOffset;
+        public int playheadTime => (int) playhead.ElapsedMilliseconds;
         private HighAccuracyTimer highAccuracyTimer;
         private HighAccuracyTimer normalCycleTimer;
         private Thread thread;
@@ -108,6 +109,10 @@ namespace Autosu.classes.autopilot {
             // nav update
             if (status >= EAutopilotMasterState.ON) {
                 NavUpdate();
+            }
+
+            if (status == EAutopilotMasterState.FULL) {
+                AccuracyUpdate();
             }
 
             // check for game start

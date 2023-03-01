@@ -41,6 +41,12 @@ namespace Autosu.Classes {
         #endregion
 
         public float realCircleRadius => APUtil.OsuPixelDistance(54.5f - 4.48f * circleSize);
+        /// <summary>
+        /// The boundary between hitting a 300 and a 100 on this map.
+        /// </summary>
+        public int hitWindowBoundary300 => (int)(80f - 6f * (overallDifficulty / 10f));
+        public int hitWindowBoundary100 => (int)(140f - 8f * (overallDifficulty / 10f));
+        public int hitWindowBoundary50 => (int)(200f - 10f * (overallDifficulty / 10f));
 
         /// <summary>
         /// The length of the period prior to judgement, that the note is visible.

@@ -34,6 +34,7 @@ namespace Autosu.Pages.Bot {
                 bgPath = $@"{Path.GetDirectoryName(bm.path)}\{bm.bgFileName}",
                 bmTitle = bm.title,
                 bmDifficulty = bm.variation,
+                timingBoundary = bm.hitWindowBoundary300,
             };
         }
 
@@ -50,6 +51,7 @@ namespace Autosu.Pages.Bot {
                 case "sliderhalt-thresh": Autopilot.i.config.inputs.sliderHaltThreshold = value; break;
                 case "hitdelay-sel": Autopilot.i.config.inputs.hnavDelayRef = value; break;
                 case "movedelay-sel": Autopilot.i.config.inputs.mnavDelayRef = value; break;
+                case "minimum-acc": Autopilot.i.config.inputs.minimumAcc = value; break;
             }
         }
 
@@ -68,7 +70,7 @@ namespace Autosu.Pages.Bot {
                 },
                 ap_warn = Autopilot.i.status == EAutopilotMasterState.DISENGAGE_WARN,
                 opmode_switch = Autopilot.i.config.features.autoSwitch ? Autopilot.i.isHumanInput ? EAnnunciatorState.GREEN : EAnnunciatorState.AMBER : EAnnunciatorState.OFF,
-                acc = Autopilot.i.status == EAutopilotMasterState.FULL ? EAnnunciatorState.GREEN : EAnnunciatorState.OFF,
+                acc = Autopilot.i.status == EAutopilotMasterState.FULL ? Autopilot.i.accuracyAnnunciatorState : EAnnunciatorState.OFF,
                 mnav_desync = Autopilot.i.mnavDesyncWarn,
                 hnav_fault = Autopilot.i.hnavFaultWarn,
                 nav_mode = Autopilot.i.status == EAutopilotMasterState.FULL ? Autopilot.i.pathingMode : 0,
@@ -131,7 +133,9 @@ namespace Autosu.Pages.Bot {
             return JsonConvert.SerializeObject(new {
                 inputs = Autopilot.i.config.inputs,
                 calib = -Autopilot.i.calibOffset,
-                enableCalib = Autopilot.i.status == EAutopilotMasterState.FULL
+                enableCalib = Autopilot.i.status == EAutopilotMasterState.FULL,
+                enableAccDisp = Autopilot.i.status >= EAutopilotMasterState.ON && (Autopilot.i.accuracyLock || !Autopilot.i.config.features.accuracySelect),
+                acc = Autopilot.i.currentAccuracy,
             });
         }
 

@@ -109,7 +109,13 @@ namespace Autosu.classes.autopilot {
         public void NavUpdate() {
             // mouse
             int mnavThreshold = Math.Min(1000, beatmap.visualPeriod);
-            int hnavThreshold = 0 + nextHitDelay;
+            if (lastAccuracyRandom != 0) nextHitDelay = (int)lastAccuracyRandom;
+            int hnavThreshold = 0 + Math.Min(0, nextHitDelay);
+
+            if (pathingMode == EPathingControlMode.KEYBOARD && nextHitDelay > 0 && navTarget.time - time < nextHitDelay && navTarget.type == EHitObjectType.CIRCLE) {
+                PressHitKeySafe();
+                navTarget.keyPressed = true;
+            }
 
             if (pathingMode == EPathingControlMode.KEYBOARD && navTarget.time - time < hnavThreshold) {
                 // keyboard
@@ -117,11 +123,15 @@ namespace Autosu.classes.autopilot {
                 // movement target clears after key press
                 float distance = Vector2.Distance(new(Cursor.Position.X, Cursor.Position.Y), APUtil.OsuPixelToScreen(navTarget.pos));    
                 if (mouseMoveQueueFinished || (hnavThreshold > 0 && mouseMoveQueue.Count <= Math.Abs(nextHitDelay))) {
+                    int delay = -nextHitDelay;
+
+                    // record the delay
 
                     mouseMoveQueue.Clear();
                     mouseMoveQueueFinished = true;
 
                     if (navTarget is SliderObject) {
+                        if (!vKeyboardLock) results.Add(new(delay));
                         SliderObject slider = (SliderObject) navTarget;
                         extendQueueStarted = true;
                         //Debug.Print($"************SLIDER START: Type: {((SliderObject) navTarget).curveType.ToString()}");
@@ -138,7 +148,8 @@ namespace Autosu.classes.autopilot {
                         // control is returned when extendMoveQueue clears and unlocks
 
                     } else {
-                        if (config.features.hnav && (mouseMoveQueueFinished || status == EAutopilotMasterState.FULL && !abortCatch)) PressHitKey();
+                        results.Add(new(delay));
+                        if (config.features.hnav && (mouseMoveQueueFinished || status == EAutopilotMasterState.FULL && !abortCatch) && !navTarget.keyPressed) PressHitKey();
                         NextNav();
                         // return control to the mouse
                         pathingMode = EPathingControlMode.MOUSE;
@@ -193,16 +204,26 @@ namespace Autosu.classes.autopilot {
 
                     // get the move to target path
 
-                    float circleRadius = APUtil.OsuPixelDistance(54.5f - 4.48f * beatmap.circleSize);
-                    Vector2[] path = MouseUtil.GetLinearPath(
-                        cursorPos, 
-                        targetPos, 
-                        Math.Min(navTarget.time - time, mnavThreshold), 
-                        sysLatency
-                    );
+                    float circleRadius = beatmap.realCircleRadius;
+                    Vector2[] path;
+
+                    // calculate the total move time
+                    int totalMoveTime = Math.Min(navTarget.time - time, mnavThreshold);
+                    int holdAtTargetTime = timeDiff < 300 ? new Random().Next(0, 10) : new Random().Next(0, (int)(totalMoveTime / 2)); 
+
+                    if (navQueue.Count > 1 && Vector2.Distance(cursorPos, APUtil.OsuPixelToScreen(navQueue[1].pos)) >= circleRadius / 2f) {
+                        path = MouseUtil.GetLinearPath(
+                            cursorPos,
+                            targetPos,
+                            totalMoveTime - holdAtTargetTime,
+                            sysLatency
+                        );
+                    } else path = MouseUtil.GetPlaceholderPath(totalMoveTime - holdAtTargetTime, sysLatency);
                     mouseMoveQueue.AddRange(path);
 
-                    nextHitDelay = config.features.hitDelay ? new Random().Next(-config.inputs.hnavDelayRef, 0) : 0;
+                    if (holdAtTargetTime > 0) mouseMoveQueue.AddRange(MouseUtil.GetPlaceholderPath(holdAtTargetTime, sysLatency));
+
+                    nextHitDelay = config.features.hitDelay ? new Random().Next(-config.inputs.hnavDelayRef, config.inputs.hnavDelayRef) : 0;
 
                     // slider
                     if (navTarget is SliderObject) {
@@ -216,7 +237,7 @@ namespace Autosu.classes.autopilot {
                         int approachCircleRadius = (int)(circleRadius * (187f / 106f));
 
                         // halt on short slider
-                        const float distThresh = 2.75f;
+                        float distThresh = config.inputs.sliderHaltThreshold / 10f;
                         // take random target offset into account
                         int circleDist = config.features.shortSliderHalt ? (int) ((approachCircleRadius - circleRadius) * distThresh) : -1;
 
@@ -284,6 +305,26 @@ namespace Autosu.classes.autopilot {
                 }
             }
 
+        }
+
+        public void PressHitKeySafe() {
+            if (vKeyboardLock) return;
+
+            nextKeyPressAlt = !nextKeyPressAlt;
+
+            VirtualKeyCode key = nextKeyPressAlt ? VirtualKeyCode.VK_X : VirtualKeyCode.VK_Z;
+
+            var t = new Thread(() => {
+                new InputSimulator().Keyboard.KeyDown(key);
+
+                Thread.Sleep(new Random().Next(20, 35));
+
+                vKeyboardLock = false;
+                new InputSimulator().Keyboard.KeyUp(key);
+            });
+
+            t.Start();
+            vKeyboardLock = true;
         }
 
         public void PressHitKey() {

@@ -215,7 +215,8 @@ namespace Autosu.Utils {
             }*/
 
             // Check direction of sweep angle and reverse it if it is greater than pi
-            if (Math.Abs(sweepAngle) > Math.PI) {
+            bool isLongArc = Vector2.Distance(startPos, midPoint) > Vector2.Distance(startPos, endPos);
+            if (Math.Abs(sweepAngle) > Math.PI && !isLongArc) {
                 if (sweepAngle > 0) {
                     sweepAngle -= (float) (2 * Math.PI);
                 } else {
