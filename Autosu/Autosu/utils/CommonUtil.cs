@@ -26,6 +26,16 @@ namespace Autosu.Utils {
             return $"{Application.StartupPath}{path.Replace("/", "\\")}";
         }
 
+        public static float LerpFloat(float firstFloat, float secondFloat, float by) {
+            return firstFloat * (1 - by) + secondFloat * by;
+        }
+
+        public static T[] SubArray<T>(this T[] array, int offset, int length) {
+            T[] result = new T[length];
+            Array.Copy(array, offset, result, 0, length);
+            return result;
+        }
+
         public static void BrowserConsoleLog(ChromiumWebBrowser browser, string message) {
             browser.ExecuteScriptAsync($"console.log(`{message}`)");
         }

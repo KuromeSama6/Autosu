@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Autosu.Utils {
@@ -84,6 +85,58 @@ namespace Autosu.Utils {
 
         }
 
+        public static Vector2[] GetLinearPathInterpol(Vector2 currentPos, Vector2 targetPos, int durationMs, int stepMs, int acceleration, int deceleration) {
+            stepMs = Math.Max(stepMs, 1);
+
+            List<Vector2> positions = new List<Vector2>();
+
+            // Calculate the distance to move in each axis
+            float deltaX = targetPos.X - currentPos.X;
+            float deltaY = targetPos.Y - currentPos.Y;
+
+            // Calculate the total distance to move and the number of steps required
+            float distance = (float) Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            int numSteps = (int) Math.Ceiling(durationMs / (float) stepMs);
+
+            // Calculate the step size based on the total distance and number of steps
+            float stepSize = 1f / numSteps;
+
+            // Calculate the direction of movement and the initial position
+            float directionX = deltaX / distance;
+            float directionY = deltaY / distance;
+            Vector2 currentPosition = currentPos;
+
+            // Add the initial position to the list of positions
+            positions.Add(currentPosition);
+
+            // Calculate the intermediate positions
+            for (int i = 1; i < numSteps; i++) {
+                // Calculate the progress of the animation normalized between 0 and 1
+                float progress = (float) i / numSteps;
+
+                // Apply a quadratic ease-in, ease-out function to the progress value
+                float easedProgress = EaseInOutCubic(progress);
+
+                // Calculate the position based on the eased progress value
+                float nextPosX = currentPos.X + (easedProgress * deltaX);
+                float nextPosY = currentPos.Y + (easedProgress * deltaY);
+                Vector2 nextPosition = new Vector2(nextPosX, nextPosY);
+
+                // Add the next position to the list of positions
+                positions.Add(nextPosition);
+
+                // Update the current position
+                currentPosition = nextPosition;
+            }
+
+            // Add the target position to the list of positions
+            positions.Add(targetPos);
+
+            // Convert the list to an array and return it
+            return positions.ToArray();
+        }
+
         public static Vector2[] GetLinearPathSlider(Vector2 currentPos, Vector2[] positions, int durationMs, int stepMs, int haltDist = -1) {
             stepMs = Math.Max(stepMs, 1);
             List<Vector2> ret = new();
@@ -134,6 +187,14 @@ namespace Autosu.Utils {
             }
 
             return intermediatePoints.ToArray();
+        }
+
+        private static float EaseInOutQuad(float t) {
+            return t < 0.5f ? 2f * t * t : -1f + (4f - 2f * t) * t;
+        }
+
+        private static float EaseInOutCubic(float t) {
+            return (float)(t < 0.5f ? 4f * t * t * t : 1f - Math.Pow(-2f * t + 2f, 3f) / 2f);
         }
 
         public static Vector2[] GetPlaceholderPath(int durationMs, int stepMs) {
@@ -216,7 +277,7 @@ namespace Autosu.Utils {
 
             // Check direction of sweep angle and reverse it if it is greater than pi
             bool isLongArc = Vector2.Distance(startPos, midPoint) > Vector2.Distance(startPos, endPos);
-            if (Math.Abs(sweepAngle) > Math.PI && !isLongArc) {
+            if (Math.Abs(sweepAngle) > Math.PI) {
                 if (sweepAngle > 0) {
                     sweepAngle -= (float) (2 * Math.PI);
                 } else {

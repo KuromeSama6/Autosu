@@ -82,8 +82,15 @@ namespace Autosu.classes.autopilot {
         public void PadAccuracy(bool goesUp) {
             if (status < EAutopilotMasterState.FULL) return;
 
-            if (goesUp) for (int i = 0; i < 8; i++) results.Add(new(0));
-            else for (int i = 0; i < 1; i++) results.Add(new(beatmap.hitWindowBoundary100 + 2));
+            if (goesUp) {
+                for (int i = 0; i < 4; i++) {
+                    HitResult? res = results.Find(r => r.result > EHitResult.THREEHUNDRED);
+                    if (res != null) res.realDelay = 0;
+                }
+            } else {
+                HitResult? res = results.Find(r => r.result == EHitResult.THREEHUNDRED);
+                if (res != null) res.realDelay = 9999;
+            }
 
         }
 

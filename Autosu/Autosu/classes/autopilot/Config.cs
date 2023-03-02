@@ -62,10 +62,10 @@ namespace Autosu.classes.autopilot {
         public int hnavDelayRef = 5;
         public int mnavDelayRef = 35;
         public int minimumAcc = 95;
-        public int targetOffsetAmount = 35;
+        public int targetOffsetAmount = 25;
         public int targetOffsetThreshold = 90;
         public int spinnerRandomAmount = 70;
-        public int sliderHaltThreshold = 150;
+        public int sliderHaltThreshold = 230;
     }
 
 }

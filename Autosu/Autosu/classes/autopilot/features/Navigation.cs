@@ -209,16 +209,22 @@ namespace Autosu.classes.autopilot {
 
                     // calculate the total move time
                     int totalMoveTime = Math.Min(navTarget.time - time, mnavThreshold);
-                    int holdAtTargetTime = timeDiff < 300 ? new Random().Next(0, 10) : new Random().Next(0, (int)(totalMoveTime / 2)); 
+                    int holdAtTargetTime = timeDiff < 300 ? new Random().Next(0, 10) : new Random().Next(0, (int)(totalMoveTime / 8.6f));
 
-                    if (navQueue.Count > 1 && Vector2.Distance(cursorPos, APUtil.OsuPixelToScreen(navQueue[1].pos)) >= circleRadius / 2f) {
-                        path = MouseUtil.GetLinearPath(
-                            cursorPos,
-                            targetPos,
-                            totalMoveTime - holdAtTargetTime,
-                            sysLatency
-                        );
-                    } else path = MouseUtil.GetPlaceholderPath(totalMoveTime - holdAtTargetTime, sysLatency);
+                    float easeMultipler;
+                    if (timeDiff < 50f) easeMultipler = 0f;
+                    else if (timeDiff < 150f) easeMultipler = 0.1f;
+                    else easeMultipler = 0.2f;
+                    int easeTime = (int)((totalMoveTime - holdAtTargetTime) * easeMultipler);
+
+                    if (navQueue.Count > 1 && Vector2.Distance(cursorPos, APUtil.OsuPixelToScreen(navTarget.pos)) < circleRadius / 2f) {
+                        path = MouseUtil.GetPlaceholderPath(totalMoveTime - holdAtTargetTime, sysLatency);
+                        //} else path = MouseUtil.GetLinearPath(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency); 
+                    } else {
+                        if (totalMoveTime - holdAtTargetTime > 250) path = MouseUtil.GetLinearPathInterpol(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency, easeTime, easeTime);
+                        else path = MouseUtil.GetLinearPath(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency);
+                    }
+
                     mouseMoveQueue.AddRange(path);
 
                     if (holdAtTargetTime > 0) mouseMoveQueue.AddRange(MouseUtil.GetPlaceholderPath(holdAtTargetTime, sysLatency));
@@ -230,14 +236,14 @@ namespace Autosu.classes.autopilot {
                         extendMoveQueue.Clear();
                         SliderObject slider = (SliderObject)navTarget;
                         int duration = (int) Math.Round(slider.GetDuration(beatmap));
-                        Vector2 startPos = APUtil.OsuPixelToScreen(slider.pos);
+                        Vector2 startPos = targetPos;
 
                         // path is for a single slide
                         // remember mouse halt
                         int approachCircleRadius = (int)(circleRadius * (187f / 106f));
 
                         // halt on short slider
-                        float distThresh = config.inputs.sliderHaltThreshold / 10f;
+                        float distThresh = config.inputs.sliderHaltThreshold / 100f;
                         // take random target offset into account
                         int circleDist = config.features.shortSliderHalt ? (int) ((approachCircleRadius - circleRadius) * distThresh) : -1;
 
