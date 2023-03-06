@@ -53,6 +53,8 @@ namespace Autosu.classes.autopilot {
                     }
                     break;
 
+                case "hr": if (status <= EAutopilotMasterState.ARM) config.features.hardrock = !config.features.hardrock; break;
+                case "dt": if (status <= EAutopilotMasterState.ARM) config.features.doubletime = !config.features.doubletime; break;
 
             }
         }

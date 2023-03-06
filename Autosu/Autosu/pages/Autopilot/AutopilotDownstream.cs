@@ -52,6 +52,7 @@ namespace Autosu.Pages.Bot {
                 case "hitdelay-sel": Autopilot.i.config.inputs.hnavDelayRef = value; break;
                 case "movedelay-sel": Autopilot.i.config.inputs.mnavDelayRef = value; break;
                 case "minimum-acc": Autopilot.i.config.inputs.minimumAcc = value; break;
+                case "targetsize-mult": Autopilot.i.config.inputs.targetSizeMultiplier = value; break;
             }
         }
 

@@ -10,6 +10,7 @@ using System.Windows.Forms.VisualStyles;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
+using System.Numerics;
 
 namespace Autosu.Utils {
     public static class CommonUtil {
@@ -46,6 +47,34 @@ namespace Autosu.Utils {
 
         public static Task<JavascriptResponse> CallBrowserFunctionWithCallback(ChromiumWebBrowser browser, string name, object param) {
             return browser.EvaluateScriptAsync($"{name}(JSON.parse('{JsonConvert.SerializeObject(param)}'))");
+        }
+
+        public static Vector2 GetRightAngleVertex(Vector2 a, Vector2 b) {
+            // Calculate the displacement vector from b to a
+            Vector2 displacement = a - b;
+
+            // Calculate the perpendicular vector to the displacement vector by rotating it 90 degrees
+            Vector2 perpendicular = new Vector2(-displacement.Y, displacement.X);
+
+            // Calculate the third vertex by adding the displacement and perpendicular vectors to b
+            Vector2 c = b + perpendicular;
+
+            return c;
+        }
+
+        public static float GetAngle(Vector2 o, Vector2 b, Vector2 a) {
+            // Find the length of the two sides adjacent to the angle
+            float adjacent1 = Vector2.Distance(o, b);
+            float adjacent2 = Vector2.Distance(o, a);
+
+            // Find the length of the hypotenuse
+            float hypotenuse = Vector2.Distance(b, a);
+
+            // Use the law of cosines to find the angle (in radians)
+            float angleRad = MathF.Acos((adjacent1 * adjacent1 + adjacent2 * adjacent2 - hypotenuse * hypotenuse) / (2 * adjacent1 * adjacent2));
+
+            // Convert the angle to degrees and return it
+            return angleRad * (180f / MathF.PI);
         }
 
         public static float RandomFloatRange(float min, float max) {

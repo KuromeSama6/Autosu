@@ -45,6 +45,11 @@ namespace Autosu.classes.autopilot {
         private bool extendQueueStarted;
         private int nextMoveDelay = 0;
         private int nextHitDelay = 0;
+        private Point lastMovePos;
+
+        // this is only used if the last navTarget should be passed without stopping.
+        private float lastMovementSpeed = -1f;
+        private Vector2 passbyFinalPos = Vector2.Zero;
 
         // premature call will abort current path
         public void NextNav() {
@@ -73,6 +78,9 @@ namespace Autosu.classes.autopilot {
             if (!extendQueueStarted) {
                 if (mouseMoveQueue.Count > 0) {
                     var pos = mouseMoveQueue[0];
+
+                    // check if mouse has moved
+
                     if (status == EAutopilotMasterState.FULL && config.features.mnav) MouseUtil.SetCursor(new((int) Math.Round(pos.X), (int) Math.Round(pos.Y)));
                     mouseMoveQueue.RemoveAt(0);
                     mouseMoveQueueFinished = false;
@@ -108,12 +116,12 @@ namespace Autosu.classes.autopilot {
 
         public void NavUpdate() {
             // mouse
-            int mnavThreshold = Math.Min(1000, beatmap.visualPeriod);
+            int mnavThreshold = Math.Min(400, beatmap.visualPeriod);
             if (lastAccuracyRandom != 0) nextHitDelay = (int)lastAccuracyRandom;
             int hnavThreshold = 0 + Math.Min(0, nextHitDelay);
 
-            if (pathingMode == EPathingControlMode.KEYBOARD && nextHitDelay > 0 && navTarget.time - time < nextHitDelay && navTarget.type == EHitObjectType.CIRCLE) {
-                PressHitKeySafe();
+            if (pathingMode == EPathingControlMode.KEYBOARD && nextHitDelay > 0 && navTarget.time - time < nextHitDelay && navTarget.type == EHitObjectType.CIRCLE && !navTarget.keyPressed) {
+                PressHitKey();
                 navTarget.keyPressed = true;
             }
 
@@ -175,7 +183,8 @@ namespace Autosu.classes.autopilot {
 
             if (pathingMode == EPathingControlMode.MOUSE) {
                 int timeDiff = navTarget.time - time - nextMoveDelay;
-                if (timeDiff < mnavThreshold - nextMoveDelay) {
+                // do not stop if lastMovementSpeed < -1
+                if (timeDiff < mnavThreshold - nextMoveDelay || lastMovementSpeed > -1) {
 
                     // mnav desync warning (threshold = 60)
                     if (mouseMoveQueue.Count > 60) {
@@ -210,19 +219,32 @@ namespace Autosu.classes.autopilot {
                     // calculate the total move time
                     int totalMoveTime = Math.Min(navTarget.time - time, mnavThreshold);
                     int holdAtTargetTime = timeDiff < 300 ? new Random().Next(0, 10) : new Random().Next(0, (int)(totalMoveTime / 8.6f));
+                    int finalMoveTime = totalMoveTime - holdAtTargetTime;
+
 
                     float easeMultipler;
                     if (timeDiff < 50f) easeMultipler = 0f;
                     else if (timeDiff < 150f) easeMultipler = 0.1f;
                     else easeMultipler = 0.2f;
-                    int easeTime = (int)((totalMoveTime - holdAtTargetTime) * easeMultipler);
+                    int easeTime = (int)((finalMoveTime) * easeMultipler);
 
-                    if (navQueue.Count > 1 && Vector2.Distance(cursorPos, APUtil.OsuPixelToScreen(navTarget.pos)) < circleRadius / 2f) {
-                        path = MouseUtil.GetPlaceholderPath(totalMoveTime - holdAtTargetTime, sysLatency);
-                        //} else path = MouseUtil.GetLinearPath(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency); 
+                    // check if next pass over next navTarget
+                    // This should be the last check before path generation
+                    if (lastMovementSpeed >= 0) {
+                        targetPos = passbyFinalPos;
+                        int duration = (int) (Vector2.Distance(cursorPos, targetPos) / lastMovementSpeed);
+                        finalMoveTime = Math.Min(finalMoveTime, duration);
+
+                        lastMovementSpeed = -1f;
+                    }
+
+                    bool overlappingCircle = navQueue.Count > 1 && Vector2.Distance(cursorPos, APUtil.OsuPixelToScreen(navTarget.pos)) < circleRadius / (config.inputs.targetSizeMultiplier / 100f);
+                    if (overlappingCircle) {
+                        path = MouseUtil.GetPlaceholderPath(finalMoveTime, sysLatency);
+                        //} else path = MouseUtil.GetLinearPath(cursorPos, targetPos, finalMoveTime, sysLatency); 
                     } else {
-                        if (totalMoveTime - holdAtTargetTime > 250) path = MouseUtil.GetLinearPathInterpol(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency, easeTime, easeTime);
-                        else path = MouseUtil.GetLinearPath(cursorPos, targetPos, totalMoveTime - holdAtTargetTime, sysLatency);
+                        if (Vector2.Distance(cursorPos, targetPos) >= Screen.PrimaryScreen.Bounds.Y / 1.5f) path = MouseUtil.GetLinearPathInterpol(cursorPos, targetPos, finalMoveTime, sysLatency, easeTime, easeTime);
+                        else path = MouseUtil.GetLinearPath(cursorPos, targetPos, finalMoveTime, sysLatency);
                     }
 
                     mouseMoveQueue.AddRange(path);
@@ -230,6 +252,21 @@ namespace Autosu.classes.autopilot {
                     if (holdAtTargetTime > 0) mouseMoveQueue.AddRange(MouseUtil.GetPlaceholderPath(holdAtTargetTime, sysLatency));
 
                     nextHitDelay = config.features.hitDelay ? new Random().Next(-config.inputs.hnavDelayRef, config.inputs.hnavDelayRef) : 0;
+
+                    // check the next two navTargets for passing by
+                    /*if (navQueue.Count >= 2 && !overlappingCircle && navTarget.type == EHitObjectType.CIRCLE) {
+                        Vector2 o = APUtil.OsuPixelToScreen(navTarget.pos);
+                        Vector2 b = APUtil.OsuPixelToScreen(navQueue[1].pos);
+                        Vector2 a = new(o.X, b.Y);
+
+                        float theta = CommonUtil.GetAngle(o, b, a);
+                        if (MathF.Abs(theta) <= 5f) {
+                            // will pass by on next point
+                            lastMovementSpeed = Vector2.Distance(cursorPos, targetPos) / finalMoveTime;
+                            passbyFinalPos = CommonUtil.GetRightAngleVertex(targetPos, b);
+                        }
+
+                    }*/
 
                     // slider
                     if (navTarget is SliderObject) {
@@ -313,24 +350,18 @@ namespace Autosu.classes.autopilot {
 
         }
 
-        public void PressHitKeySafe() {
-            if (vKeyboardLock) return;
-
-            nextKeyPressAlt = !nextKeyPressAlt;
-
-            VirtualKeyCode key = nextKeyPressAlt ? VirtualKeyCode.VK_X : VirtualKeyCode.VK_Z;
+        public void PressHitKeyUnsafe() {
+            VirtualKeyCode key = !nextKeyPressAlt ? VirtualKeyCode.VK_X : VirtualKeyCode.VK_Z;
 
             var t = new Thread(() => {
                 new InputSimulator().Keyboard.KeyDown(key);
 
                 Thread.Sleep(new Random().Next(20, 35));
 
-                vKeyboardLock = false;
                 new InputSimulator().Keyboard.KeyUp(key);
             });
 
             t.Start();
-            vKeyboardLock = true;
         }
 
         public void PressHitKey() {

@@ -83,10 +83,8 @@ namespace Autosu.classes.autopilot {
             if (status < EAutopilotMasterState.FULL) return;
 
             if (goesUp) {
-                for (int i = 0; i < 4; i++) {
-                    HitResult? res = results.Find(r => r.result > EHitResult.THREEHUNDRED);
-                    if (res != null) res.realDelay = 0;
-                }
+                HitResult? res = results.Find(r => r.result > EHitResult.THREEHUNDRED);
+                if (res != null) res.realDelay = 0;
             } else {
                 HitResult? res = results.Find(r => r.result == EHitResult.THREEHUNDRED);
                 if (res != null) res.realDelay = 9999;

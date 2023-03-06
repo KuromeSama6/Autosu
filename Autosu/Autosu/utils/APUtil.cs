@@ -1,4 +1,5 @@
-﻿using Autosu.Utils;
+﻿using Autosu.classes.autopilot;
+using Autosu.Utils;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,7 +32,15 @@ namespace Autosu.Utils {
             float actualX = osuPixel.X * scaleX + (screenWidth - playingAreaWidth) / 2f;
             float actualY = osuPixel.Y * scaleY + playingAreaY + (screenHeight - playingAreaHeight) / 2f;
 
-            return new Vector2(actualX, actualY);
+            var ret = new Vector2(actualX, actualY);
+
+            // hardrock
+            if (Autopilot.i.config.features.hardrock) {
+                ret.Y = screenHeight - ret.Y;
+                ret.Y += playingAreaY * 2;
+            }
+
+            return ret;
         }
 
         public static float OsuPixelDistance(float dist) {

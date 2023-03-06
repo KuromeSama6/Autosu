@@ -67,7 +67,7 @@ namespace Autosu.Classes {
             ret = Config.instance.beatmaps.Find((bm) => bm.title == title && bm.variation == variation);
 
             if (ret == null) throw new BeatmapNotFoundException();
-            else return ret;
+            else return new(ret.path);
         }
 
         public TimingSection? GetTimingSection(int positionInMs) {

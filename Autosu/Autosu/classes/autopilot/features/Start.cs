@@ -21,19 +21,38 @@ namespace Autosu.classes.autopilot {
         public void StartSong() {
             // delay is 178 frames @ 60fps
             CommonUtil.DelayedCall(() => {
-                /*testPlayer = new WindowsMediaPlayer();
-                testPlayer.URL = beatmap.audioPath;
-                testPlayer.settings.volume = 5;
-                testPlayer.controls.play();*/
-
                 status = config.features.n1 ? EAutopilotMasterState.ON : EAutopilotMasterState.FULL;
                 AutopilotPage.instance.SetOverlay(true, config.features.n1);
                 if (!config.features.n1) {
                     if (AutopilotPage.instance.visible) AutopilotPage.instance.visible = true;
                     playhead.Start();
                 }
-                /*Vector2[] path = MouseUtil.GetLinearPath(new(Cursor.Position.X, Cursor.Position.Y), APUtil.OsuPixelToScreen(navTarget.pos), new Random().Next(200, 500));
-                foreach (var pos in path) pointsQueue.Add(pos);*/
+
+
+                // hardrock: translate the hits
+                if (config.features.hardrock) {
+                    // circleRadius +30%
+                    beatmap.circleSize *= 1.3f;
+                    // approach +40%
+                    beatmap.approachRate *= 1.4f;
+                    // overallDifficulty +40%
+                    beatmap.overallDifficulty = (int)(beatmap.overallDifficulty * 1.4f);
+
+                }
+
+                // double time
+                if (config.features.doubletime) {
+                    foreach (var obj in navQueue) {
+                        obj.time = (int)(obj.time / 1.5f);
+
+                        if (obj is SpinnerObject) {
+                            var spinner = (SpinnerObject)obj;
+                            spinner.endTime = (int) (spinner.endTime / 1.5f);
+                        }
+
+                    }
+                }
+
 
             }, 1f / 60f * 151f);
 

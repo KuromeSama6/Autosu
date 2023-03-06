@@ -101,7 +101,7 @@ namespace Autosu {
                 Location = new Point(Screen.PrimaryScreen.WorkingArea.Width - Width, 0);
 
             } else {
-                TopMost = true;
+                TopMost = false;
                 FormBorderStyle = FormBorderStyle.FixedSingle;
                 // Remove WS_EX_TOPMOST and WS_EX_TRANSPARENT styles
 

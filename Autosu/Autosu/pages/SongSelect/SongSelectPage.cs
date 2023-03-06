@@ -56,6 +56,7 @@ namespace Autosu {
             //WindowState = FormWindowState.Maximized;
             globalKeyHook.OnKeyDown += MainKeyboardDown;
             globalMouseHook.OnButtonDown += MainMouseDown;
+            globalMouseHook.OnMouseMove += MainMouseMoved;
             Vector2 startPos = new(Screen.PrimaryScreen.Bounds.Width / 2, Screen.PrimaryScreen.Bounds.Height / 2);
             this.Icon = new Icon(CommonUtil.ParsePath("resources/common/logo.ico"));
         }
@@ -70,6 +71,9 @@ namespace Autosu {
                 if (e.KeyCode == VirtualKeycodes.PageUp) Autopilot.i.PadAccuracy(true);
                 if (e.KeyCode == VirtualKeycodes.PageDown) Autopilot.i.PadAccuracy(false);
             }
+
+            if (e.KeyCode == VirtualKeycodes.E) Autopilot.i.TryRegularCalib(true);
+            if (e.KeyCode == VirtualKeycodes.Q) Autopilot.i.TryRegularCalib(false);
 
             if (e.KeyCode == VirtualKeycodes.C) Autopilot.i.TryN1Calib();
             if (e.KeyCode == VirtualKeycodes.A && Autopilot.i.navTarget != null) Debug.WriteLine($"Mark placed at: #{Autopilot.i.navTarget.time}");
@@ -90,6 +94,10 @@ namespace Autosu {
                     case GHMouseButtons.Left: Autopilot.i.Arm(); break;
                 }
             }
+        }
+
+        private void MainMouseMoved(object sender, GlobalMouseEventArgs e) {
+
         }
 
         public void SwitchPage<T>() where T: Form, new(){

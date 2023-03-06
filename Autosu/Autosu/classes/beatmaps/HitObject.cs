@@ -1,4 +1,5 @@
-﻿using Autosu.Enums;
+﻿using Autosu.classes.autopilot;
+using Autosu.Enums;
 using Autosu.Utils;
 using System;
 using System.Collections.Generic;
@@ -71,8 +72,9 @@ namespace Autosu.Classes {
             float sv = timingSection.sliderSpeed;
 
             //Debug.WriteLine($"TimingPoint {timingSection.time}: SliderMultiplier={sm} BeatLength={beatLength} SV={sv}");
-
-            return (length / (sm * 100f * sv) * beatLength);
+            var ret = (length / (sm * 100f * sv) * beatLength);
+            if (Autopilot.i.config.features.doubletime) ret /= 1.5f;
+            return ret;
 
         }
 

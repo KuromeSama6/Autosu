@@ -30,9 +30,8 @@
 				<img class="preview-thumbnail" src="img-placeholder.png" id="preview-img">
 			</div>
 			<div class="col-5">
-				<h2 id="$chosen-beatmap-title">UNABLE LOAD BEATMAP</h2>
-				<p>Variation: <b id="$chosen-beatmap-desc">UNABLE LOAD VARIATION</b></p>
-				<p>300/100 Boundary: <b id="$timing-boundary">-</b></p>
+				<h3 id="$chosen-beatmap-title">UNABLE LOAD BEATMAP</h2>
+				<p id="$chosen-beatmap-desc">Variation: UNABLE LOAD VARIATION</p>
 				<p id="$next-object"></p>
 			</div>
 			<div class="col-5 d-flex justify-content-end align-items-center position-relative">
@@ -266,6 +265,33 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					</div>
 				</label>
 
+				<!-- hr -->
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:hr" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Hardrock">
+					HR<br>&nbsp;
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- (placeholder) -->
+				<input type="checkbox" class="btn-check togglebtn" id="" autocomplete="off" style="opacity: 1f;">
+				<label class="btn btn-primary" for="btn-check" title="" style="color:gray !important;opacity: 0 !important;">
+					INOP<br>&nbsp;
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
+				<!-- dt -->
+				<input type="checkbox" class="btn-check togglebtn" id="toggle:dt" autocomplete="off">
+				<label class="btn btn-primary" for="btn-check" title="Double Time">
+					DT<br>&nbsp;
+					<div class="d-flex align-items-center">
+						<div class="enable-indicator" hidden></div>
+					</div>
+				</label>
+
 			</div>
 
 			<div class="col-6 individual-box inputs-box">
@@ -318,6 +344,12 @@ Automatically disengages and fails if accuracy on a hard (fast and quick notes) 
 					<div class="input-box">
 						<small style="display:inline-block">SLIDER HALT DIST THRESH</small><br>
 						<input type="number" id="!sliderhalt-thresh" style="width: 2em;" class="boeing-input" min="0" max="1000" value="000" data-digits="3"><br>
+					</div>
+				</div>
+				<div class="d-flex flex-row">
+					<div class="input-box">
+						<small style="display:inline-block">TARGET SIZE MSR MULT</small><br>
+						<input type="number" id="!targetsize-mult" style="width: 2em;" class="boeing-input" min="1" max="999" value="200" data-digits="3"><br>
 					</div>
 				</div>
 			</div>

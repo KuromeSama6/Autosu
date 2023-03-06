@@ -39,4 +39,9 @@ namespace Autosu.classes.autopilot {
         BAD
     }
 
+    public enum EOpMode { 
+        AUTO,
+        MANUAL
+    }
+
 }

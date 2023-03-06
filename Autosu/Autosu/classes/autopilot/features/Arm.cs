@@ -16,7 +16,6 @@ using WMPLib;
 namespace Autosu.classes.autopilot {
     public partial class Autopilot {
         public EAutopilotArmState armState { get; private set; }
-        private WindowsMediaPlayer testPlayer;
 
         public void Arm() {
             if (armState == EAutopilotArmState.START_LISTEN) {

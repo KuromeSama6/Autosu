@@ -36,8 +36,7 @@ function setToggle(name, value){
 upstream.initAutopilot().then(res => {
     $g("preview-img").src = res.bgPath;
     _("$chosen-beatmap-title", res.bmTitle);
-    _("$chosen-beatmap-desc", res.bmDifficulty);
-    _("$timing-boundary", `${res.timingBoundary}ms`);
+    _("$chosen-beatmap-desc", `Variation: <b>${res.bmDifficulty}</b>; 300/100 Boundary: <b>${res.timingBoundary}ms</b>.`);
 
 });
 
@@ -113,6 +112,8 @@ setInterval(() => {
         setToggle("autoswitch", f.autoSwitch);
         setToggle("tkovrstby", f.takeoverStandby);
         setToggle("detentstby", f.panic);
+        setToggle("hr", f.hardrock);
+        setToggle("dt", f.doubletime);
 
     });
 

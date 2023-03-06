@@ -55,6 +55,8 @@ namespace Autosu.classes.autopilot {
         public bool autoSwitch = false;
         public bool takeoverStandby = true;
         public bool playDetent = false;
+        public bool hardrock;
+        public bool doubletime;
     }
 
     [Serializable]
@@ -66,6 +68,7 @@ namespace Autosu.classes.autopilot {
         public int targetOffsetThreshold = 90;
         public int spinnerRandomAmount = 70;
         public int sliderHaltThreshold = 230;
+        public int targetSizeMultiplier = 150;
     }
 
 }

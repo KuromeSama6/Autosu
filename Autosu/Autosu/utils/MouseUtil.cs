@@ -116,7 +116,7 @@ namespace Autosu.Utils {
                 float progress = (float) i / numSteps;
 
                 // Apply a quadratic ease-in, ease-out function to the progress value
-                float easedProgress = EaseInOutCubic(progress);
+                float easedProgress = EaseInOutQuad(progress);
 
                 // Calculate the position based on the eased progress value
                 float nextPosX = currentPos.X + (easedProgress * deltaX);

@@ -23,6 +23,7 @@ namespace Autosu.classes.autopilot {
             if (status == EAutopilotMasterState.ON) status = EAutopilotMasterState.FULL;
 
             if (!n1Init && config.features.n1) {
+                lastMovePos = Cursor.Position;
                 playhead.Start();
                 APUtil.PlayAnnunciatorAlert();
                 if (AutopilotPage.instance.visible) AutopilotPage.instance.visible = true;
