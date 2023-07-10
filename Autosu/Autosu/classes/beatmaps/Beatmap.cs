@@ -178,6 +178,11 @@ namespace Autosu.Classes {
 
             }
 
+            // remove leading spinner
+            while (objects[0].type == EHitObjectType.SPINNER) {
+                objects.RemoveAt(0);
+            }
+            
             //File.WriteAllText(CommonUtil.ParsePath($"userdata/debug/{title}-{variation}.aosbmp"), JsonConvert.SerializeObject(this.objects));
 
         }

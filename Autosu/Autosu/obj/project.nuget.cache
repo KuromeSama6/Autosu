@@ -1,22 +1,22 @@
 {
   "version": 2,
-  "dgSpecHash": "sEOP7/9KA7NZ0+ovKxi6ZxIlvT0OuQvcYIkFEfcZnRfDW/YKb5Kfbv0JO+d6hOxQfuBh7ISJa/GkZ4uZY3ePeA==",
+  "dgSpecHash": "uthJnKzcPTwTYyy2fub/HL4dxAKS4v9mxEfiZHBqUUzVV5sM/XET2wp5e0qibWUnYvX4jNzFuIXZV2NHJ1vy1Q==",
   "success": true,
   "projectFilePath": "D:\\dev\\Autosu\\Autosu\\Autosu\\Autosu.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\1chan\\.nuget\\packages\\cef.redist.x64\\110.0.25\\cef.redist.x64.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\cef.redist.x86\\110.0.25\\cef.redist.x86.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\cefsharp.common\\110.0.250\\cefsharp.common.110.0.250.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\cefsharp.common.netcore\\110.0.250\\cefsharp.common.netcore.110.0.250.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\cefsharp.winforms\\110.0.250\\cefsharp.winforms.110.0.250.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\cefsharp.winforms.netcore\\110.0.250\\cefsharp.winforms.netcore.110.0.250.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime\\110.0.25\\chromiumembeddedframework.runtime.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-arm64\\110.0.25\\chromiumembeddedframework.runtime.win-arm64.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x64\\110.0.25\\chromiumembeddedframework.runtime.win-x64.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x86\\110.0.25\\chromiumembeddedframework.runtime.win-x86.110.0.25.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\indieteur.globalhooks\\1.0.0\\indieteur.globalhooks.1.0.0.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\inputsimulator\\1.0.4\\inputsimulator.1.0.4.nupkg.sha512",
-    "C:\\Users\\1chan\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
+    "C:\\Users\\asus\\.nuget\\packages\\cef.redist.x64\\110.0.25\\cef.redist.x64.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\cef.redist.x86\\110.0.25\\cef.redist.x86.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\cefsharp.common\\110.0.250\\cefsharp.common.110.0.250.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\cefsharp.common.netcore\\110.0.250\\cefsharp.common.netcore.110.0.250.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\cefsharp.winforms\\110.0.250\\cefsharp.winforms.110.0.250.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\cefsharp.winforms.netcore\\110.0.250\\cefsharp.winforms.netcore.110.0.250.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\chromiumembeddedframework.runtime\\110.0.25\\chromiumembeddedframework.runtime.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\chromiumembeddedframework.runtime.win-arm64\\110.0.25\\chromiumembeddedframework.runtime.win-arm64.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x64\\110.0.25\\chromiumembeddedframework.runtime.win-x64.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\chromiumembeddedframework.runtime.win-x86\\110.0.25\\chromiumembeddedframework.runtime.win-x86.110.0.25.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\indieteur.globalhooks\\1.0.0\\indieteur.globalhooks.1.0.0.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\inputsimulator\\1.0.4\\inputsimulator.1.0.4.nupkg.sha512",
+    "C:\\Users\\asus\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512"
   ],
   "logs": [
     {
