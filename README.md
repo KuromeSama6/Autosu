@@ -1,4 +1,7 @@
 # Autosu!
+
+**This project is being archived due to the lack of maintenance and testing on multiple platforms, as well as me spending more time on osu! and digging deeper into the game. No support will be given, and all issues will no longer be responded to. A rework in Rust is planned, but will not likely happen in the forseeable future.**
+
 ### Still a working progress.
 Osu! autoplay bot, made with CefSharp Winforms and native C# libraries, with the dedication to simulate human hand movement.
 
